@@ -1,0 +1,9 @@
+BarcodeFormat:1D Barcode
+BarcodeNumber:3
+TemplatePosition:412,1321.5
+BarcodeTypes:Code128
+PatternRectangle:43,749,1070,1064
+Barcode1Rectangle:1026,1080,467,49
+Barcode2Rectangle:190,1058,602,55
+Barcode3Rectangle:179,868,782,49
+QRRectangle:1151,434,869,1081

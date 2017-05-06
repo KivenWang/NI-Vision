@@ -1,0 +1,11 @@
+BarcodeFormat:1D Barcode
+BarcodeNumber:2
+TemplatePosition:916.5,1194.5
+BarcodeTypes:Code39
+PatternRectangle:310,830,1495,790
+Barcode1Rectangle:1334,659,519,27
+Barcode2Rectangle:158,557,642,27
+QRRectangle:1178,342,1178,966
+QRMatrixSize:Size25x25
+QRPolarity:BlackOnWhite
+QRCellSampleSize:Size3x3
