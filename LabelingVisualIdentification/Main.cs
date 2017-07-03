@@ -15,6 +15,7 @@ using System.IO.Ports;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using log4net;
 namespace LabelingVisualIdentification
 {
     public partial class Main : Form
@@ -24,7 +25,7 @@ namespace LabelingVisualIdentification
             InitializeComponent();
         }
 
-
+        private static readonly ILog logger = LogManager.GetLogger("Product");
         bool run = false;
         bool debug = false;
         Socket socketSend;
@@ -47,6 +48,7 @@ namespace LabelingVisualIdentification
         #region  Form controls
         private void Main_Load(object sender, EventArgs e)
         {
+            logger.Debug("form load debug");
             //new tabcontrol1 region
             this.tabControl1.Region = new Region(new RectangleF(this.tabPage1.Left, this.tabPage1.Top, this.tabPage1.Width, this.tabPage1.Height));
             //Get current directory path
