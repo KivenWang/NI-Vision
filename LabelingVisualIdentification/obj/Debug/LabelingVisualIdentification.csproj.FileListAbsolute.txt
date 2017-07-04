@@ -45,3 +45,6 @@ H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\L
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.csproj.GenerateResource.Cache
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\bin\Debug\LabelingVisualIdentification.exe.config
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\bin\Debug\log4net.dll
+H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\bin\Debug\System.Configuration.dll
+H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\bin\Debug\UserPrograms.xml
+H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\bin\Debug\System.Xml.dll

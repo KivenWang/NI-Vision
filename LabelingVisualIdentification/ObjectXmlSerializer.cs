@@ -20,7 +20,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using log4net;
 
-namespace Valor.Common
+namespace LabelingVisualIdentification
 {
     public enum SerializedFormat
     {

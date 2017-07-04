@@ -16,6 +16,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using log4net;
+using System.Configuration;
 namespace LabelingVisualIdentification
 {
     public partial class Main : Form
@@ -27,7 +28,6 @@ namespace LabelingVisualIdentification
 
         private static readonly ILog logger = LogManager.GetLogger("Product");
         bool run = false;
-        bool debug = false;
         Socket socketSend;
         private System.Timers.Timer timerPLC = new System.Timers.Timer(1000);
         //PLC communication ASCII code
@@ -48,36 +48,37 @@ namespace LabelingVisualIdentification
         #region  Form controls
         private void Main_Load(object sender, EventArgs e)
         {
-            logger.Debug("form load debug");
-            //new tabcontrol1 region
-            this.tabControl1.Region = new Region(new RectangleF(this.tabPage1.Left, this.tabPage1.Top, this.tabPage1.Width, this.tabPage1.Height));
-            //Get current directory path
-            Common.path = Environment.CurrentDirectory;
-            if (!(Directory.Exists(Common.path + "\\Programming\\template")))
-            {
-                Directory.CreateDirectory(Common.path + "\\Programming\\template");
-            }
-            ReadConfig();
-            TcpConnect();
-            if (!debug)
-            {
+            ////new tabcontrol1 region
+            //this.tabControl1.Region = new Region(new RectangleF(this.tabPage1.Left, this.tabPage1.Top, this.tabPage1.Width, this.tabPage1.Height));
+            ////Get current directory path
+            //Common.path = Environment.CurrentDirectory;
+            //if (!(Directory.Exists(Common.path + "\\Programming\\template")))
+            //{
+            //    Directory.CreateDirectory(Common.path + "\\Programming\\template");
+            //}
+            //TcpConnect();
+            //if (!IsDebug ())
+            //{
 
-                Thread timerTh = new Thread(timer);
-                timerTh.IsBackground = true;
-                timerTh.Start();
+            //    Thread timerTh = new Thread(timer);
+            //    timerTh.IsBackground = true;
+            //    timerTh.Start();
 
-                try
-                {
-                    Common.cameraID = txtCameraID.Text;
-                    Common.session = new ImaqdxSession(txtCameraID.Text);
-                }
-                catch (Exception ex)
-                {
-                    txtInformation.AppendText(DateTime.Now.ToString() + ": New imaqdx session error when form load! " + ex.Message + "\r\n");
-                    lblCamera.BackColor = Color.Red;
+            //    try
+            //    {
+            //        Common.cameraID = txtCameraID.Text;
+            //        Common.session = new ImaqdxSession(txtCameraID.Text);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        txtInformation.AppendText(DateTime.Now.ToString() + ": New imaqdx session error when form load! " + ex.Message + "\r\n");
+            //        lblCamera.BackColor = Color.Red;
 
-                }
-            }
+            //    }
+            //}
+
+            var userProgram = ConfigManager.UserPrograms1.UserProgram;
+            txtInformation.AppendText(userProgram[0].BarcodeFormat);
 
         }
 
@@ -174,7 +175,7 @@ namespace LabelingVisualIdentification
 
         private void btnSnap1_Click(object sender, EventArgs e)
         {
-            if (!debug)
+            if (!IsDebug())
             {
                 if (run)
                 {
@@ -194,7 +195,7 @@ namespace LabelingVisualIdentification
                     }
                 }
             }
-            else if (debug)
+            else
             {
                 ImagePreviewFileDialog imageDialog = new ImagePreviewFileDialog();
 
@@ -237,7 +238,7 @@ namespace LabelingVisualIdentification
 
         private void btnSnap2_Click(object sender, EventArgs e)
         {
-            if (!debug)
+            if (!IsDebug())
             {
                 if (run)
                 {
@@ -256,7 +257,7 @@ namespace LabelingVisualIdentification
                     }
                 }
             }
-            else if (debug)
+            else
             {
                 ImagePreviewFileDialog imageDialog = new ImagePreviewFileDialog();
 
@@ -327,9 +328,9 @@ namespace LabelingVisualIdentification
             lblSerialPort.BackColor = Color.Green;
             lblSFIS.BackColor = Color.Green;
             lblCamera.BackColor = Color.Green;
-            
+
             TcpConnect();
-            if (!debug)
+            if (!IsDebug())
             {
                 if (Common.session == null)
                 {
@@ -360,32 +361,16 @@ namespace LabelingVisualIdentification
 
         //Reading the configurations.
         //是否为调试模式？预留调试
-        public void ReadConfig()
+        private bool IsDebug()
         {
-            try
+            string isDebug = ConfigurationManager.AppSettings["Debug"];
+            if (isDebug.Equals("true"))
             {
-                string[] config = File.ReadAllLines(Common.path + "\\Config", Encoding.UTF8);
-
-                foreach (string s in config)
-                {
-                    if (s.StartsWith("DebugMode"))
-                    {
-                        string[] debugMode = s.Split(':');
-                        if (debugMode[1] == "true")
-                        {
-                            debug = true;
-                        }
-                        else if (debugMode[1] == "false")
-                        {
-                            debug = false;
-                        }
-                    }
-                }
+                return true;
             }
-            catch (Exception ex)
+            else
             {
-                txtInformation.AppendText(DateTime.Now.ToString() + ": read config error!\r\n");
-                MessageBox.Show(ex.Message + "---read config error when form load!");
+                return false;
             }
         }
 
@@ -738,7 +723,7 @@ namespace LabelingVisualIdentification
                         txtInformation.AppendText(DateTime.Now.ToString() + ": Receive message from SFIS: Receiving error!\r\n");
                         timerPLC.Enabled = true;
                     }
-                    
+
 
 
                 }
@@ -820,7 +805,7 @@ namespace LabelingVisualIdentification
         private void timer()
         {
             timerPLC.Elapsed += new System.Timers.ElapsedEventHandler(timerTh_Tick);
-           
+
         }
 
         int ijk = 0;
@@ -942,7 +927,7 @@ namespace LabelingVisualIdentification
                             else
                             {
                                 timerPLC.Enabled = false;
-                                TcpSend(txtAnalysis1);                                
+                                TcpSend(txtAnalysis1);
                             }
                         }
                         break;
@@ -961,9 +946,9 @@ namespace LabelingVisualIdentification
                             }
                             txtInformation.AppendText(DateTime.Now.ToString() + ": Analysis2: " + txtAnalysis2);
                             txtInformation.AppendText(DateTime.Now.ToString() + ": SFISCodeInfo: " + SFISCodeInfo);
-                            txtInformation.AppendText(DateTime.Now.ToString() + ": Analysis2: " + txtAnalysis2.Length .ToString ()+"\r\n");
+                            txtInformation.AppendText(DateTime.Now.ToString() + ": Analysis2: " + txtAnalysis2.Length.ToString() + "\r\n");
                             txtInformation.AppendText(DateTime.Now.ToString() + ": SFISCodeInfo: " + SFISCodeInfo.Length.ToString() + "\r\n");
-                            if (txtAnalysis2+"\r" == SFISCodeInfo && SFISCodeInfo != "")
+                            if (txtAnalysis2 + "\r" == SFISCodeInfo && SFISCodeInfo != "")
                             {
                                 timerPLC.Enabled = false;
                                 PlcWrite(success2);
@@ -980,7 +965,7 @@ namespace LabelingVisualIdentification
                             timerPLC.Enabled = true;
                         }
                         break;
-                    case snap0 :
+                    case snap0:
                         {
                             timerPLC.Enabled = true;
                         }
