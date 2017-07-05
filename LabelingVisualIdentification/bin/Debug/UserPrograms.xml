@@ -1,16 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<UserPrograms>
-  <UserProgram Id="0" Name="Program0">
+<UserProgramConfig>
+  <UserPrograms>
+   <UserProgram Id="0" Name="Program0">
     <BarcodeFormat>1D Barcode</BarcodeFormat>
     <BarcodeNumber>1</BarcodeNumber>
     <TemplatePosition X="393" Y="1304.5"></TemplatePosition>
     <BarcodeTypes>Code128</BarcodeTypes>
-    <PatternRectangle>5,798,1233,1010</PatternRectangle>
-    <!--<TemplatePath>C:\Users\F7822560\Desktop\LabelingVisualIdentification\bin\Debug\Programming\template\6666.png</TemplatePath>
-    <Barcode1Rectangle>190,760,651,38</Barcode1Rectangle>
-    <QRRectangle>1400,255,1016,1140</QRRectangle>
+    <PatternRectangle Left="5" Top="798" Width="1233" Height="1010"></PatternRectangle>
+    <TemplatePath>C:\Users\F7822560\Desktop\LabelingVisualIdentification\bin\Debug\Programming\template\6666.png</TemplatePath>
+    <Barcode1Rectangle Left="190" Top="760" Width="651" Height="38"></Barcode1Rectangle>
+    <QRRectangle Left="1400" Top="255" Width="1016" Height="1140"></QRRectangle>
     <QRMatrixSize>Size25x25</QRMatrixSize>
     <QRPolarity>BlackOnWhite</QRPolarity>
-    <QRCellSampleSize>Size3x3</QRCellSampleSize>-->
+    <QRCellSampleSize>Size3x3</QRCellSampleSize>
   </UserProgram>
-</UserPrograms>
+   <UserProgram Id="1" Name="Program1">
+     <BarcodeFormat>1D Barcode</BarcodeFormat>
+     <BarcodeNumber>1</BarcodeNumber>
+     <TemplatePosition X="393" Y="1304.5"></TemplatePosition>
+     <BarcodeTypes>Code128</BarcodeTypes>
+     <PatternRectangle Left="5" Top="798" Width="1233" Height="1010"></PatternRectangle>
+     <TemplatePath>C:\Users\F7822560\Desktop\LabelingVisualIdentification\bin\Debug\Programming\template\6666.png</TemplatePath>
+     <Barcode1Rectangle Left="190" Top="760" Width="651" Height="38"></Barcode1Rectangle>
+     <QRRectangle Left="1400" Top="255" Width="1016" Height="1140"></QRRectangle>
+     <QRMatrixSize>Size25x25</QRMatrixSize>
+     <QRPolarity>BlackOnWhite</QRPolarity>
+     <QRCellSampleSize>Size3x3</QRCellSampleSize>
+  </UserProgram>
+  </UserPrograms>
+</UserProgramConfig>

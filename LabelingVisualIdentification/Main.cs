@@ -19,12 +19,15 @@ using log4net;
 using System.Configuration;
 namespace LabelingVisualIdentification
 {
+    
     public partial class Main : Form
     {
         public Main()
         {
             InitializeComponent();
         }
+
+        private List<UserProgram > userProgram = ConfigManager.UserPrograms.UserProgram;
 
         private static readonly ILog logger = LogManager.GetLogger("Product");
         bool run = false;
@@ -76,9 +79,12 @@ namespace LabelingVisualIdentification
 
             //    }
             //}
+            string s3=BarcodeTypes.Code39.ToString();
+            string s = userProgram[1].Name;
+            string s1 = userProgram[1].BarcodeFormat;
+            string s2 = userProgram[1].templatePosition.X .ToString ();
 
-            var userProgram = ConfigManager.UserPrograms1.UserProgram;
-            txtInformation.AppendText(userProgram[0].BarcodeFormat);
+            txtInformation.AppendText(s );
 
         }
 
@@ -304,7 +310,7 @@ namespace LabelingVisualIdentification
                 {
                     serialPort1.StopBits = StopBits.One;
                 }
-                if (cbxStopbits.Text == "Two")
+                if (cbxStopbits.Text == "Two" )
                 {
                     serialPort1.StopBits = StopBits.Two;
                 }
@@ -378,6 +384,22 @@ namespace LabelingVisualIdentification
         //每个程序文件保存该程序的相关参数，自动运行时选择对应程序可省略重复编程的麻烦。
         public void ReadProgram(string name)
         {
+            UserProgram currentProgram = userProgram.FindAll(o => (o.Name == name))[0];
+            Common.templatePath = currentProgram.TemplatePath;
+            Common.barcodeFormat = currentProgram.BarcodeFormat;
+            Common.barcodeNumber = currentProgram.BarcodeNumber;
+            Common.templatePositionX = currentProgram.templatePosition.X;
+            Common.templatePositionY = currentProgram.templatePosition.Y;
+            string barcodeType = currentProgram.BarcodeTypes;
+            if (barcodeType == BarcodeTypes.Code39.ToString ())
+            {
+                Common.barcodeTypes = BarcodeTypes.Code39;
+            }
+            if (barcodeType==BarcodeTypes.Code128.ToString ())
+            {
+                Common.barcodeTypes = BarcodeTypes.Code128;
+            }
+            
             try
             {
                 string[] prgConfig = File.ReadAllLines(Common.path + "\\Programming\\" + name, Encoding.UTF8);

@@ -1,0 +1,5 @@
+BarcodeFormat:Datamatrix
+TemplatePosition:1723.5,835
+PatternRectangle:1010,249,1411,1260
+DatamatrixRectangle:1960,510,309,326
+QRRectangle:720,96,1792,1240

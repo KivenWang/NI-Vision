@@ -1,4 +1,0 @@
-﻿2016/09/26 8:35:46: Can't connect the servers 169.254.11.111,5888通訊端操作嘗試連線到一個無法連線的網路。 169.254.11.111:5888
-2016/09/26 8:35:51: New imaqdx session error when form load! Camera not found
-2016/09/26 8:35:54: Start run program: 09231
-2016/09/26 8:35:54: PLC write error in timer!Cross-thread operation not valid: Control 'txtInformation' accessed from a thread other than the thread it was created on.

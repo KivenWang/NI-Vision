@@ -8,7 +8,7 @@ namespace LabelingVisualIdentification
     public class ConfigManager
     {
         private static UserPrograms _userPrograms;
-        public static UserPrograms UserPrograms1
+        public static UserPrograms UserPrograms
         {
             get
             {
