@@ -190,14 +190,14 @@ namespace LabelingVisualIdentification
             double vaOffsetY = 0;
             pmResults = IVA_MatchPattern(image, ivaData, vaTemplateFile, vaMode, vaSubpixelVal, minAngleVals, maxAngleVals, vaNumMatchesRequested, vaMinMatchScore, roi, vaOffsetX, vaOffsetY, 0);
 
-            
+
             foreach (PatternMatch match in pmResults)
             {
                 image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
-                
-                
+
+
             }
-            
+
             roi.Dispose();
 
             // Set Coordinate System
@@ -227,9 +227,9 @@ namespace LabelingVisualIdentification
                 Algorithms.TransformRoi(roi2, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
                 image.Overlays.Default.AddRoi(roi2);
                 // Reads the barcode from the image.
-                vaBarcode = Algorithms.ReadBarcode(image, Common .barcodeTypes , roi2, false);
-                
-                barcodeInfo =barcodeInfo + vaBarcode.Text+",";
+                vaBarcode = Algorithms.ReadBarcode(image, Common.barcodeTypes, roi2, false);
+
+                barcodeInfo = barcodeInfo + vaBarcode.Text + ",";
 
                 roi2.Dispose();
             }
@@ -246,7 +246,7 @@ namespace LabelingVisualIdentification
                 image.Overlays.Default.AddRoi(roi3);
                 // Reads the barcode from the image.
                 vaBarcode2 = Algorithms.ReadBarcode(image, Common.barcodeTypes, roi3, false);
-                
+
                 barcodeInfo = barcodeInfo + vaBarcode2.Text + ",";
 
                 roi3.Dispose();
@@ -260,7 +260,7 @@ namespace LabelingVisualIdentification
                 RectangleContour vaRect3 = new RectangleContour(Common.barcode3Left, Common.barcode3Top, Common.barcode3Width, Common.barcode3Height);
                 roi4.Add(vaRect3);
                 // Reposition the region of interest based on the coordinate system.
-                int coordSystemIndex3 = 0;                
+                int coordSystemIndex3 = 0;
                 Algorithms.TransformRoi(roi4, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex3], ivaData.MeasurementSystems[coordSystemIndex3]));
                 image.Overlays.Default.AddRoi(roi4);
                 // Reads the barcode from the image.
@@ -323,7 +323,7 @@ namespace LabelingVisualIdentification
 
                 roi7.Dispose();
             }
-            if (barcodeInfo .Substring(barcodeInfo .Length -1,1)==",")
+            if (barcodeInfo.Substring(barcodeInfo.Length - 1, 1) == ",")
             {
                 barcodeInfo = barcodeInfo.Substring(0, barcodeInfo.Length - 1);
             }
@@ -335,6 +335,101 @@ namespace LabelingVisualIdentification
 
             // Return the palette type of the final image.
             return PaletteType.Gray;
+
+        }
+
+        /// <summary>
+        /// Author by Kiven
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="userProgram"></param>
+        /// <returns></returns>
+        public static string Process1DBarcode(VisionImage image,UserProgram  userProgram)
+        {
+            string barcodeInfo = "";
+            TemplateConfig templateConfig = userProgram.TemplateConfig;
+            List<BarcodeConfig> barcodeConfigs = userProgram.BarcodeConfigs;
+
+            // Initialize the IVA_Data structure to pass results and coordinate systems.
+            IVA_Data ivaData = new IVA_Data(5, 1);
+
+            // Creates a new, empty region of interest.
+            Roi roiFullRange = new Roi();
+
+            //// Creates a new RotatedRectangleContour using the given values.
+            //PointContour vaCenter = new PointContour(1294, 972);
+            //RotatedRectangleContour vaRotatedRect = new RotatedRectangleContour(vaCenter, 2548, 1904, 0);
+
+            // Creates a new RectangleContour using the given values.
+            RectangleContour vaRotatedRect = new RectangleContour(templateConfig.Rectangle.Left, 
+                templateConfig.Rectangle.Top, templateConfig.Rectangle.Width, templateConfig.Rectangle.Height);
+            roiFullRange.Add(vaRotatedRect);
+
+            image.Overlays.Default.AddRoi(roiFullRange);
+
+            // MatchPattern Grayscale
+            string vaTemplateFile = templateConfig.TemplatePath;
+            MatchMode vaMode = MatchMode.RotationInvariant;
+            bool vaSubpixelVal = false;
+            int[] minAngleVals = { -30, 0 };
+            int[] maxAngleVals = { 30, 0 };
+            int vaNumMatchesRequested = 1;
+            double vaMinMatchScore = 800;
+            double vaOffsetX = 0;
+            double vaOffsetY = 0;
+            pmResults = IVA_MatchPattern(image, ivaData, vaTemplateFile, vaMode, vaSubpixelVal, minAngleVals, maxAngleVals, vaNumMatchesRequested, vaMinMatchScore, roiFullRange, vaOffsetX, vaOffsetY, 0);
+
+            roiFullRange.Dispose();
+
+            foreach (PatternMatch match in pmResults)
+            {
+                image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
+            }
+
+            // Set Coordinate System
+            int vaCoordSystemIndex = 0;
+            int stepIndexOrigin = 0;
+            int resultIndexOrigin = 1;
+            int stepIndexAngle = 0;
+            int resultIndexAngle = 3;
+            double refSysOriginX = templateConfig.Position.X;
+            double refSysOriginY = templateConfig.Position.Y;
+            double refSysAngle = 0;
+            AxisOrientation refSysAxisOrientation = AxisOrientation.Direct;
+            int vaCoordSystemType = 3;
+            IVA_CoordSys(vaCoordSystemIndex, stepIndexOrigin, resultIndexOrigin, stepIndexAngle, resultIndexAngle, refSysOriginX, refSysOriginY, refSysAngle, refSysAxisOrientation, vaCoordSystemType, ivaData);
+
+            for (int i = 0; i < barcodeConfigs.Count; i++)
+            {
+                // Creates a new, empty region of interest.
+                Roi roi = new Roi();
+                // Creates a new RectangleContour using the given values.
+                RectangleContour vaRect = new RectangleContour(barcodeConfigs[i].Rectangle.Left, barcodeConfigs[i].Rectangle.Top , barcodeConfigs[i].Rectangle.Width , barcodeConfigs[i].Rectangle.Height );
+                roi.Add(vaRect);
+
+                // Reposition the region of interest based on the coordinate system.
+                int coordSystemIndex = 0;
+                Algorithms.TransformRoi(roi, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
+                image.Overlays.Default.AddRoi(roi);
+                // Reads the barcode from the image.
+                vaBarcode = Algorithms.ReadBarcode(image, barcodeConfigs[i].Type , roi, false);
+
+                barcodeInfo += string.Format("{0},", vaBarcode.Text);
+                roi.Dispose();
+            }
+            
+            if (barcodeInfo.Substring(barcodeInfo.Length - 1, 1) == ",")
+            {
+                barcodeInfo = barcodeInfo.Substring(0, barcodeInfo.Length - 1);
+            }
+
+            // Dispose the IVA_Data structure.
+            ivaData.Dispose();
+
+
+
+            // Return the palette type of the final image.
+            return barcodeInfo;
 
         }
         #endregion
@@ -357,7 +452,7 @@ namespace LabelingVisualIdentification
             roi.Add(vaRotatedRect);
             image.Overlays.Default.AddRoi(roi);
             // MatchPattern Grayscale
-            string vaTemplateFile = Common .templatePath ;
+            string vaTemplateFile = Common.templatePath;
             MatchMode vaMode = MatchMode.RotationInvariant;
             bool vaSubpixelVal = false;
             int[] minAngleVals = { -30, 0 };
@@ -393,24 +488,24 @@ namespace LabelingVisualIdentification
             RectangleContour vaRect = new RectangleContour(Common.dmRectLeft, Common.dmRectTop, Common.dmRectWidth, Common.dmRectHeight);
 
             roi2.Add(vaRect);
-            
+
             // Reposition the region of interest based on the coordinate system.
             int coordSystemIndex = 0;
             Algorithms.TransformRoi(roi2, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
             image.Overlays.Default.AddRoi(roi2);
-            
+
             // Read DataMatrix Barcode
             DataMatrixDescriptionOptions vaDescriptionOptions = new DataMatrixDescriptionOptions();
             vaDescriptionOptions.AspectRatio = 0;
             vaDescriptionOptions.CellFill = DataMatrixCellFillMode.AutoDetect;
-            vaDescriptionOptions.Columns = Common .matrixSize ;
+            vaDescriptionOptions.Columns = Common.matrixSize;
             vaDescriptionOptions.Ecc = DataMatrixEcc.AutoDetect;
             vaDescriptionOptions.MinimumBorderIntegrity = 90;
             vaDescriptionOptions.MirrorMode = DataMatrixMirrorMode.AutoDetect;
             vaDescriptionOptions.Polarity = Common.polarity;//DataMatrixPolarity.BlackDataOnWhiteBackground ;
             vaDescriptionOptions.Rectangle = false;
             vaDescriptionOptions.Rows = Common.matrixSize;
-            
+
 
             DataMatrixSizeOptions vaSizeOptions = new DataMatrixSizeOptions();
             vaSizeOptions.MaximumSize = 250;
@@ -432,12 +527,12 @@ namespace LabelingVisualIdentification
             vaDataMatrixReport = Algorithms.ReadDataMatrixBarcode(image, roi2, DataMatrixGradingMode.None, vaDescriptionOptions, vaSizeOptions, vaSearchOptions);
 
             Common.datamatrixCode = vaDataMatrixReport.StringData;
-            if (vaDataMatrixReport .Found )
+            if (vaDataMatrixReport.Found)
             {
                 Common.dmFound = true;
                 image.Overlays.Default.AddPolygon(new PolygonContour(vaDataMatrixReport.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
             }
-            
+
             roi2.Dispose();
 
             // Dispose the IVA_Data structure.
@@ -447,6 +542,125 @@ namespace LabelingVisualIdentification
             return PaletteType.Gray;
 
         }
+
+        /// <summary>
+        /// author by kiven
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="userProgram"></param>
+        /// <returns></returns>
+        public static PaletteType ProcessDatamatrix(VisionImage image,UserProgram userProgram)
+        {
+            TemplateConfig templateConfig = userProgram .TemplateConfig ;
+            List<DataMatrixConfig> dataMatrixConfigs = userProgram.DataMatrixConfigs;
+
+            // Initialize the IVA_Data structure to pass results and coordinate systems.
+            IVA_Data ivaData = new IVA_Data(3, 1);
+
+            // Creates a new, empty region of interest.
+            Roi roiFullRange = new Roi();
+            //// Creates a new RotatedRectangleContour using the given values.
+            //PointContour vaCenter = new PointContour(1666, 874);
+            //RotatedRectangleContour vaRotatedRect = new RotatedRectangleContour(vaCenter, 1268, 1220, 0);
+            // Creates a new RectangleContour using the given values.
+            RectangleContour vaRotatedRect = new RectangleContour(templateConfig.Rectangle.Left,templateConfig.Rectangle.Top , 
+                templateConfig.Rectangle.Width, templateConfig.Rectangle.Height);
+            roiFullRange.Add(vaRotatedRect);
+            image.Overlays.Default.AddRoi(roiFullRange);
+            // MatchPattern Grayscale
+            string vaTemplateFile = templateConfig.TemplatePath;
+            MatchMode vaMode = MatchMode.RotationInvariant;
+            bool vaSubpixelVal = false;
+            int[] minAngleVals = { -30, 0 };
+            int[] maxAngleVals = { 30, 0 };
+            int vaNumMatchesRequested = 1;
+            double vaMinMatchScore = 800;
+            double vaOffsetX = 0;
+            double vaOffsetY = 0;
+            pmResults = IVA_MatchPattern(image, ivaData, vaTemplateFile, vaMode, vaSubpixelVal, minAngleVals, maxAngleVals, vaNumMatchesRequested, vaMinMatchScore, roiFullRange, vaOffsetX, vaOffsetY, 0);
+
+            foreach (PatternMatch match in pmResults)
+            {
+                image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
+            }
+            roiFullRange.Dispose();
+
+            // Set Coordinate System
+            int vaCoordSystemIndex = 0;
+            int stepIndexOrigin = 0;
+            int resultIndexOrigin = 1;
+            int stepIndexAngle = 0;
+            int resultIndexAngle = 3;
+            double refSysOriginX = templateConfig.Position.X;
+            double refSysOriginY = templateConfig.Position.Y ;
+            double refSysAngle = 0;
+            AxisOrientation refSysAxisOrientation = AxisOrientation.Direct;
+            int vaCoordSystemType = 3;
+            IVA_CoordSys(vaCoordSystemIndex, stepIndexOrigin, resultIndexOrigin, stepIndexAngle, resultIndexAngle, refSysOriginX, refSysOriginY, refSysAngle, refSysAxisOrientation, vaCoordSystemType, ivaData);
+
+            for (int i = 0; i < dataMatrixConfigs.Count; i++)
+            {
+                // Creates a new, empty region of interest.
+                Roi roi = new Roi();
+                // Creates a new RectangleContour using the given values.
+                RectangleContour vaRect = new RectangleContour(dataMatrixConfigs[i].Rectangle.Left, 
+                    dataMatrixConfigs[i].Rectangle.Top , dataMatrixConfigs[i].Rectangle.Width , dataMatrixConfigs[i].Rectangle.Height );
+
+                roi.Add(vaRect);
+
+                // Reposition the region of interest based on the coordinate system.
+                int coordSystemIndex = 0;
+                Algorithms.TransformRoi(roi, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
+                image.Overlays.Default.AddRoi(roi);
+
+                // Read DataMatrix Barcode
+                DataMatrixDescriptionOptions vaDescriptionOptions = new DataMatrixDescriptionOptions();
+                vaDescriptionOptions.AspectRatio = 0;
+                vaDescriptionOptions.CellFill = DataMatrixCellFillMode.AutoDetect;
+                vaDescriptionOptions.Columns = Common.matrixSize;
+                vaDescriptionOptions.Ecc = DataMatrixEcc.AutoDetect;
+                vaDescriptionOptions.MinimumBorderIntegrity = 90;
+                vaDescriptionOptions.MirrorMode = DataMatrixMirrorMode.AutoDetect;
+                vaDescriptionOptions.Polarity = Common.polarity;//DataMatrixPolarity.BlackDataOnWhiteBackground ;
+                vaDescriptionOptions.Rectangle = false;
+                vaDescriptionOptions.Rows = Common.matrixSize;
+
+
+                DataMatrixSizeOptions vaSizeOptions = new DataMatrixSizeOptions();
+                vaSizeOptions.MaximumSize = 250;
+                vaSizeOptions.MinimumSize = 50;
+                vaSizeOptions.QuietZoneWidth = 0;
+
+                DataMatrixSearchOptions vaSearchOptions = new DataMatrixSearchOptions();
+                vaSearchOptions.CellFilterMode = DataMatrixCellFilterMode.AutoDetect;
+                vaSearchOptions.CellSampleSize = Common.cellSampleSize;//DataMatrixCellSampleSize.Size3x3;
+                vaSearchOptions.DemodulationMode = DataMatrixDemodulationMode.AutoDetect;
+                vaSearchOptions.EdgeThreshold = 30;
+                vaSearchOptions.InitialSearchVectorWidth = 5;
+                vaSearchOptions.MaximumIterations = 150;
+                vaSearchOptions.RotationMode = DataMatrixRotationMode.Unlimited;
+                vaSearchOptions.SkewDegreesAllowed = 5;
+                vaSearchOptions.SkipLocation = false;
+
+                // Reads the data matrix from the image.
+                vaDataMatrixReport = Algorithms.ReadDataMatrixBarcode(image, roi, DataMatrixGradingMode.None, vaDescriptionOptions, vaSizeOptions, vaSearchOptions);
+
+                Common.datamatrixCode = vaDataMatrixReport.StringData;
+                if (vaDataMatrixReport.Found)
+                {
+                    image.Overlays.Default.AddPolygon(new PolygonContour(vaDataMatrixReport.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
+                }
+
+                roi.Dispose();
+            }
+            // Dispose the IVA_Data structure.
+            ivaData.Dispose();
+
+            // Return the palette type of the final image.
+            return PaletteType.Gray;
+
+        }
+
         #endregion
 
 
@@ -481,16 +695,16 @@ namespace LabelingVisualIdentification
             vaQRSearchOptions.SkewDegreesAllowed = 10;
             vaQRSearchOptions.SkipLocation = false;
             vaQRCode = Algorithms.ReadQRCode(image, roi, vaQROptions, vaQRSizeOptions, vaQRSearchOptions);
-            if (vaQRCode .Found )
+            if (vaQRCode.Found)
             {
                 Common.qrFound = true;
                 image.Overlays.Default.AddPolygon(new PolygonContour(vaQRCode.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
             }
             System.Text.ASCIIEncoding vaASCIIEncoding = new System.Text.ASCIIEncoding();
             vaQRCodeData = vaASCIIEncoding.GetString(vaQRCode.GetData());
-            
+
             Common.qrCode = vaQRCodeData;
-            
+
             roi.Dispose();
 
             // Dispose the IVA_Data structure.

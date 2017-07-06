@@ -79,11 +79,10 @@ namespace LabelingVisualIdentification
 
             //    }
             //}
-            string s3=BarcodeTypes.Code39.ToString();
-            string s = userProgram[1].Name;
-            string s1 = userProgram[1].BarcodeFormat;
-            string s2 = userProgram[1].templatePosition.X .ToString ();
-
+            string s = userProgram[0].Name;
+            string s1 = userProgram[0].TemplateConfig.TemplatePath;
+            string s4 = userProgram[0].BarcodeConfigs[0].Name;
+            BarcodeTypes type = userProgram[0].BarcodeConfigs[0].Type;
             txtInformation.AppendText(s );
 
         }
@@ -385,20 +384,20 @@ namespace LabelingVisualIdentification
         public void ReadProgram(string name)
         {
             UserProgram currentProgram = userProgram.FindAll(o => (o.Name == name))[0];
-            Common.templatePath = currentProgram.TemplatePath;
-            Common.barcodeFormat = currentProgram.BarcodeFormat;
-            Common.barcodeNumber = currentProgram.BarcodeNumber;
-            Common.templatePositionX = currentProgram.templatePosition.X;
-            Common.templatePositionY = currentProgram.templatePosition.Y;
-            string barcodeType = currentProgram.BarcodeTypes;
-            if (barcodeType == BarcodeTypes.Code39.ToString ())
-            {
-                Common.barcodeTypes = BarcodeTypes.Code39;
-            }
-            if (barcodeType==BarcodeTypes.Code128.ToString ())
-            {
-                Common.barcodeTypes = BarcodeTypes.Code128;
-            }
+            //Common.templatePath = currentProgram.TemplatePath;
+            //Common.barcodeFormat = currentProgram.BarcodeFormat;
+            //Common.barcodeNumber = currentProgram.BarcodeNumber;
+            //Common.templatePositionX = currentProgram.templatePosition.X;
+            //Common.templatePositionY = currentProgram.templatePosition.Y;
+            //string barcodeType = currentProgram.BarcodeTypes;
+            //if (barcodeType == BarcodeTypes.Code39.ToString ())
+            //{
+            //    Common.barcodeTypes = BarcodeTypes.Code39;
+            //}
+            //if (barcodeType==BarcodeTypes.Code128.ToString ())
+            //{
+            //    Common.barcodeTypes = BarcodeTypes.Code128;
+            //}
             
             try
             {

@@ -1,31 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <UserProgramConfig>
   <UserPrograms>
-   <UserProgram Id="0" Name="Program0">
-    <BarcodeFormat>1D Barcode</BarcodeFormat>
-    <BarcodeNumber>1</BarcodeNumber>
-    <TemplatePosition X="393" Y="1304.5"></TemplatePosition>
-    <BarcodeTypes>Code128</BarcodeTypes>
-    <PatternRectangle Left="5" Top="798" Width="1233" Height="1010"></PatternRectangle>
-    <TemplatePath>C:\Users\F7822560\Desktop\LabelingVisualIdentification\bin\Debug\Programming\template\6666.png</TemplatePath>
-    <Barcode1Rectangle Left="190" Top="760" Width="651" Height="38"></Barcode1Rectangle>
-    <QRRectangle Left="1400" Top="255" Width="1016" Height="1140"></QRRectangle>
-    <QRMatrixSize>Size25x25</QRMatrixSize>
-    <QRPolarity>BlackOnWhite</QRPolarity>
-    <QRCellSampleSize>Size3x3</QRCellSampleSize>
-  </UserProgram>
-   <UserProgram Id="1" Name="Program1">
-     <BarcodeFormat>1D Barcode</BarcodeFormat>
-     <BarcodeNumber>1</BarcodeNumber>
-     <TemplatePosition X="393" Y="1304.5"></TemplatePosition>
-     <BarcodeTypes>Code128</BarcodeTypes>
-     <PatternRectangle Left="5" Top="798" Width="1233" Height="1010"></PatternRectangle>
-     <TemplatePath>C:\Users\F7822560\Desktop\LabelingVisualIdentification\bin\Debug\Programming\template\6666.png</TemplatePath>
-     <Barcode1Rectangle Left="190" Top="760" Width="651" Height="38"></Barcode1Rectangle>
-     <QRRectangle Left="1400" Top="255" Width="1016" Height="1140"></QRRectangle>
-     <QRMatrixSize>Size25x25</QRMatrixSize>
-     <QRPolarity>BlackOnWhite</QRPolarity>
-     <QRCellSampleSize>Size3x3</QRCellSampleSize>
-  </UserProgram>
+    <UserProgram Id="0" Name="Program0">
+      <TemplateConfig>
+        <TemplatePath>D:\image.jpg</TemplatePath>
+        <Position X="12" Y="45"></Position>
+        <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+      </TemplateConfig>
+      <BarcodeConfigs>
+        <BarcodeConfig Name="BarcodeConfig0" Index="0">
+          <Type>Code128</Type>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </BarcodeConfig>
+        <BarcodeConfig Name="BarcodeConfig2" Index="2">
+          <Type>Code128</Type>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </BarcodeConfig>
+      </BarcodeConfigs>
+      <DataMatrixConfigs>
+        <DataMatrixConfig Name="DataMatrixConfig0" Index="0">
+          <MatrixSize>25X25</MatrixSize>
+          <Polarity>AutoDetect</Polarity>
+          <CellSize>Size3x3</CellSize>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </DataMatrixConfig>
+        <DataMatrixConfig Name="DataMatrixConfig0" Index="1">
+          <MatrixSize>25X25</MatrixSize>
+          <Polarity>AutoDetect</Polarity>
+          <CellSize>Size3x3</CellSize>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </DataMatrixConfig>
+      </DataMatrixConfigs>
+      <QRConfigs>
+        <QRConfig Name="QRConfig0" Index="0">
+          <QRSize>25X25</QRSize>
+          <Polarity>AutoDetect</Polarity>
+          <CellSize>Size3x3</CellSize>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </QRConfig>
+        <QRConfig Name="QRConfig1" Index="2">
+          <QRSize>25X25</QRSize>
+          <Polarity>AutoDetect</Polarity>
+          <CellSize>Size3x3</CellSize>
+          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
+        </QRConfig>
+      </QRConfigs>
+    </UserProgram>
   </UserPrograms>
 </UserProgramConfig>

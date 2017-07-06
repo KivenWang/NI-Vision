@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="EnumberHelper.cs" />
     <Compile Include="ObjectXmlSerializer.cs" />
     <Compile Include="Processing.cs" />
     <Compile Include="Common.cs" />

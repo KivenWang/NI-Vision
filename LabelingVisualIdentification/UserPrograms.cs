@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using NationalInstruments.Vision.Analysis;
 
 namespace LabelingVisualIdentification
 {
     [XmlRoot("UserProgramConfig")]
     public class UserPrograms
     {
-        [XmlArray("UserPrograms"),XmlArrayItem ("UserProgram",typeof (UserProgram) )]
+        [XmlArray("UserPrograms"), XmlArrayItem("UserProgram", typeof(UserProgram))]
         public List<UserProgram> UserProgram { get; set; }
     }
 
@@ -25,74 +26,104 @@ namespace LabelingVisualIdentification
         /// </summary>
         [XmlAttribute("Name")]
         public string Name { get; set; }
-
         /// <summary>
-        /// 条码类型
+        /// 模板信息
         /// </summary>
-        [XmlElementAttribute("BarcodeFormat")]
-        public string BarcodeFormat { get; set; }
-
+        [XmlElementAttribute("TemplateConfig")]
+        public TemplateConfig TemplateConfig { get; set; }
         /// <summary>
-        /// 条码数量
+        /// 一维码信息
         /// </summary>
-        [XmlElementAttribute("BarcodeNumber")]
-        public int BarcodeNumber { get; set; }
-
+        [XmlArray ("BarcodeConfigs"), XmlArrayItem ("BarcodeConfig",typeof (BarcodeConfig ))]
+        public List<BarcodeConfig> BarcodeConfigs { get; set; }
         /// <summary>
-        /// 模板坐标位置
+        /// DataMatrix信息
         /// </summary>
-        [XmlElementAttribute("TemplatePosition")]
-        public TemplatePosition templatePosition { get; set; }
-
+        [XmlArray("DataMatrixConfigs"), XmlArrayItem("DataMatrixConfig", typeof(DataMatrixConfig))]
+        public List<DataMatrixConfig> DataMatrixConfigs { get; set; }
         /// <summary>
-        /// 条码类型
-        /// </summary>
-        [XmlElementAttribute("BarcodeTypes")]
-        public string BarcodeTypes { get; set; }
-
-        /// <summary>
-        /// 模板矩形
-        /// </summary>
-        [XmlElementAttribute("PatternRectangle")]
-        public PatternRectangle PatternRectangle { get; set; }
-
-        /// <summary>
-        /// 模板路径
-        /// </summary>
+        /// QR信息
+        /// </summary>        
+        [XmlArray("QRConfigs"), XmlArrayItem("QRConfig", typeof(QRConfig))]
+        public List<QRConfig> QRConfigs { get; set; }
+       
+    }
+    public class TemplateConfig
+    {
         [XmlElementAttribute("TemplatePath")]
         public string TemplatePath { get; set; }
 
-        /// <summary>
-        /// 模板矩形
-        /// </summary>
-        [XmlElementAttribute("Barcode1Rectangle")]
-        public Barcode1Rectangle Barcode1Rectangle { get; set; }
+        [XmlElementAttribute("Position")]
+        public VisionPosition Position { get; set; }
 
-        /// <summary>
-        /// QR矩形
-        /// </summary>
-        [XmlElementAttribute("QRRectangle")]
-        public QRRectangle QRRectangle { get; set; }
-
-        /// <summary>
-        /// QRMatrixSize
-        /// </summary>
-        [XmlElementAttribute("QRMatrixSize")]
-        public string QRMatrixSize { get; set; }
-
-        /// <summary>
-        /// 模板矩形
-        /// </summary>
-        [XmlElementAttribute("QRPolarity")]
-        public string QRPolarity { get; set; }
-
-        /// <summary>
-        /// 模板矩形
-        /// </summary>
-        [XmlElementAttribute("QRCellSampleSize")]
-        public string QRCellSampleSize { get; set; }
+        [XmlElementAttribute("Rectangle")]
+        public VisionRectangle Rectangle { get; set; }
     }
-    public class TemplatePosition
+
+    public class BarcodeConfig
+    {
+        /// <summary>
+        /// 条码名称
+        /// </summary>
+        [XmlAttribute("Name")]
+        public string Name { get; set; }
+
+        [XmlAttribute("Index")]
+        public int Index { get; set; }
+
+        [XmlElementAttribute("Type")]
+        public BarcodeTypes Type { get; set; }
+
+        [XmlElementAttribute("Rectangle")]
+        public VisionRectangle Rectangle { get; set; }
+    }
+
+    public class DataMatrixConfig
+    {
+        [XmlAttribute("Name")]
+        public string Name { get; set; }
+
+        [XmlAttribute("Index")]
+        public int Index { get; set; }
+
+        [XmlElementAttribute("MatrixSize")]
+        public string MatrixSize { get; set; }
+
+        [XmlElementAttribute("Polarity")]
+        public DataMatrixPolarity  Polarity { get; set; }
+
+        [XmlElementAttribute("CellSize")]
+        public DataMatrixCellSampleSize CellSize { get; set; }
+
+        [XmlElementAttribute("Rectangle")]
+        public VisionRectangle Rectangle { get; set; }
+    }
+
+    public class QRConfig
+    {
+        [XmlAttribute("Name")]
+        public string Name { get; set; }
+
+        [XmlAttribute("Index")]
+        public int Index { get; set; }
+
+        [XmlElementAttribute("QRSize")]
+        public string QRSize { get; set; }
+
+        [XmlElementAttribute("Polarity")]
+        public QRPolarity Polarity { get; set; }
+
+        [XmlElementAttribute("CellSize")]
+        public QRCellSampleSize CellSize { get; set; }
+
+        [XmlElementAttribute("Rectangle")]
+        public VisionRectangle Rectangle { get; set; }
+    }
+
+    /// <summary>
+    /// 视觉用到的位置信息
+    /// </summary>
+    public class VisionPosition
     {
         [XmlAttribute("X")]
         public double X { get; set; }
@@ -100,7 +131,10 @@ namespace LabelingVisualIdentification
         [XmlAttribute("Y")]
         public double Y { get; set; }
     }
-    public class PatternRectangle
+    /// <summary>
+    /// 视觉用到的矩形位置
+    /// </summary>
+    public class VisionRectangle
     {
         [XmlAttribute("Left")]
         public double Left { get; set; }
@@ -116,35 +150,4 @@ namespace LabelingVisualIdentification
 
     }
 
-    public class Barcode1Rectangle
-    {
-        [XmlAttribute("Left")]
-        public double Left { get; set; }
-
-        [XmlAttribute("Top")]
-        public double Top { get; set; }
-
-        [XmlAttribute("Width")]
-        public double Width { get; set; }
-
-        [XmlAttribute("Height")]
-        public double Height { get; set; }
-
-    }
-
-    public class QRRectangle
-    {
-        [XmlAttribute("Left")]
-        public double Left { get; set; }
-
-        [XmlAttribute("Top")]
-        public double Top { get; set; }
-
-        [XmlAttribute("Width")]
-        public double Width { get; set; }
-
-        [XmlAttribute("Height")]
-        public double Height { get; set; }
-
-    }
 }
