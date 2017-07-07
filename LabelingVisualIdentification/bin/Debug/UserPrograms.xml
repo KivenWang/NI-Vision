@@ -33,51 +33,18 @@
       </DataMatrixConfigs>
       <QRConfigs>
         <QRConfig Name="QRConfig0" Index="0">
-          <QRSize>25X25</QRSize>
+          <QRDimension>Size25x25</QRDimension>
           <Polarity>AutoDetect</Polarity>
           <CellSize>Size3x3</CellSize>
           <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
         </QRConfig>
         <QRConfig Name="QRConfig1" Index="2">
-          <QRSize>25X25</QRSize>
+          <QRDimension>Size25x25</QRDimension>
           <Polarity>AutoDetect</Polarity>
           <CellSize>Size3x3</CellSize>
           <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
         </QRConfig>
       </QRConfigs>
     </UserProgram>
-    <!--<UserProgram Id="1" Name="Program1">
-      <TemplateConfig>
-        <TemplatePath>D:\image.jpg</TemplatePath>
-        <Position X="12" Y="45"></Position>
-        <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
-      </TemplateConfig>
-      <BarcodeConfigs>
-        <BarcodeConfig Name="BarcodeConfig0" Index="0">
-          <Type>Code128</Type>
-          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
-        </BarcodeConfig>
-        <BarcodeConfig Name="BarcodeConfig2" Index="2">
-          <Type>Code128</Type>
-          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
-        </BarcodeConfig>
-      </BarcodeConfigs>
-      <DataMatrixConfigs>
-        <DataMatrixConfig Name="DataMatrixConfig0" Index="0">
-          <MatrixSize>25X25</MatrixSize>
-          <Polarity>BlackOnWhite</Polarity>
-          <CellSize>Size3x3</CellSize>
-          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
-        </DataMatrixConfig>
-      </DataMatrixConfigs>
-      <QRConfigs>
-        <QRConfig Name="QRConfig0" Index="0">
-          <QRSize>25X25</QRSize>
-          <Polarity>BlackOnWhite</Polarity>
-          <CellSize>Size3x3</CellSize>
-          <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
-        </QRConfig>
-      </QRConfigs>
-    </UserProgram>-->
   </UserPrograms>
 </UserProgramConfig>

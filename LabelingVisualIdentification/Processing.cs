@@ -25,6 +25,7 @@ namespace LabelingVisualIdentification
         public static QRReport vaQRCode;
         public static string vaQRCodeData;
 
+
         #region  Pattern match
         private static Collection<PatternMatch> IVA_MatchPattern(VisionImage image,
                                                                  IVA_Data ivaData,
@@ -343,10 +344,10 @@ namespace LabelingVisualIdentification
         /// </summary>
         /// <param name="image"></param>
         /// <param name="userProgram"></param>
-        /// <returns></returns>
+        /// <returns>split with '|'</returns>
         public static string Process1DBarcode(VisionImage image,UserProgram  userProgram)
         {
-            string barcodeInfo = "";
+            string barcodeInfo = string.Empty;
             TemplateConfig templateConfig = userProgram.TemplateConfig;
             List<BarcodeConfig> barcodeConfigs = userProgram.BarcodeConfigs;
 
@@ -414,11 +415,11 @@ namespace LabelingVisualIdentification
                 // Reads the barcode from the image.
                 vaBarcode = Algorithms.ReadBarcode(image, barcodeConfigs[i].Type , roi, false);
 
-                barcodeInfo += string.Format("{0},", vaBarcode.Text);
+                barcodeInfo += string.Format("{0}|", vaBarcode.Text);
                 roi.Dispose();
             }
             
-            if (barcodeInfo.Substring(barcodeInfo.Length - 1, 1) == ",")
+            if (!string .IsNullOrEmpty (barcodeInfo ))
             {
                 barcodeInfo = barcodeInfo.Substring(0, barcodeInfo.Length - 1);
             }
@@ -548,9 +549,10 @@ namespace LabelingVisualIdentification
         /// </summary>
         /// <param name="image"></param>
         /// <param name="userProgram"></param>
-        /// <returns></returns>
-        public static PaletteType ProcessDatamatrix(VisionImage image,UserProgram userProgram)
+        /// <returns>split with '|'</returns>
+        public static string ProcessDatamatrix(VisionImage image,UserProgram userProgram)
         {
+            string dataMatrixInfo=string .Empty ;
             TemplateConfig templateConfig = userProgram .TemplateConfig ;
             List<DataMatrixConfig> dataMatrixConfigs = userProgram.DataMatrixConfigs;
 
@@ -617,13 +619,16 @@ namespace LabelingVisualIdentification
                 DataMatrixDescriptionOptions vaDescriptionOptions = new DataMatrixDescriptionOptions();
                 vaDescriptionOptions.AspectRatio = 0;
                 vaDescriptionOptions.CellFill = DataMatrixCellFillMode.AutoDetect;
-                vaDescriptionOptions.Columns = Common.matrixSize;
-                vaDescriptionOptions.Ecc = DataMatrixEcc.AutoDetect;
+                uint  matrixSizeColumns=25;
+                uint.TryParse(dataMatrixConfigs[i].MatrixSize.Split('X')[1], out matrixSizeColumns);
+                vaDescriptionOptions.Columns = matrixSizeColumns;
                 vaDescriptionOptions.MinimumBorderIntegrity = 90;
                 vaDescriptionOptions.MirrorMode = DataMatrixMirrorMode.AutoDetect;
-                vaDescriptionOptions.Polarity = Common.polarity;//DataMatrixPolarity.BlackDataOnWhiteBackground ;
+                vaDescriptionOptions.Polarity = dataMatrixConfigs[0].Polarity;
                 vaDescriptionOptions.Rectangle = false;
-                vaDescriptionOptions.Rows = Common.matrixSize;
+                uint matrixSizeRows = 25;
+                uint.TryParse(dataMatrixConfigs[i].MatrixSize.Split('X')[0], out matrixSizeRows);
+                vaDescriptionOptions.Rows = matrixSizeRows;
 
 
                 DataMatrixSizeOptions vaSizeOptions = new DataMatrixSizeOptions();
@@ -633,7 +638,7 @@ namespace LabelingVisualIdentification
 
                 DataMatrixSearchOptions vaSearchOptions = new DataMatrixSearchOptions();
                 vaSearchOptions.CellFilterMode = DataMatrixCellFilterMode.AutoDetect;
-                vaSearchOptions.CellSampleSize = Common.cellSampleSize;//DataMatrixCellSampleSize.Size3x3;
+                vaSearchOptions.CellSampleSize = dataMatrixConfigs[0].CellSize;
                 vaSearchOptions.DemodulationMode = DataMatrixDemodulationMode.AutoDetect;
                 vaSearchOptions.EdgeThreshold = 30;
                 vaSearchOptions.InitialSearchVectorWidth = 5;
@@ -645,19 +650,23 @@ namespace LabelingVisualIdentification
                 // Reads the data matrix from the image.
                 vaDataMatrixReport = Algorithms.ReadDataMatrixBarcode(image, roi, DataMatrixGradingMode.None, vaDescriptionOptions, vaSizeOptions, vaSearchOptions);
 
-                Common.datamatrixCode = vaDataMatrixReport.StringData;
                 if (vaDataMatrixReport.Found)
                 {
                     image.Overlays.Default.AddPolygon(new PolygonContour(vaDataMatrixReport.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
                 }
+                dataMatrixInfo += string.Format("{0}|", vaDataMatrixReport.StringData);
 
                 roi.Dispose();
+            }
+            if (!string.IsNullOrEmpty(dataMatrixInfo))
+            {
+                dataMatrixInfo = dataMatrixInfo.Substring(0, dataMatrixInfo.Length -1);
             }
             // Dispose the IVA_Data structure.
             ivaData.Dispose();
 
             // Return the palette type of the final image.
-            return PaletteType.Gray;
+            return dataMatrixInfo;
 
         }
 
@@ -714,23 +723,100 @@ namespace LabelingVisualIdentification
             return PaletteType.Gray;
 
         }
+
+        /// <summary>
+        /// author by kiven
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="userProgram"></param>
+        /// <returns>split with '|' </returns>
+        public static string ProcessQR(VisionImage image,UserProgram userProgram)
+        {
+            string qRInfo = string.Empty;
+            TemplateConfig templateConfig = userProgram.TemplateConfig;
+            List<QRConfig> qRConfigs = userProgram.QRConfigs ;
+            // Initialize the IVA_Data structure to pass results and coordinate systems.
+            IVA_Data ivaData = new IVA_Data(1, 0);
+
+            // Creates a new, empty region of interest.
+            Roi roi = new Roi();
+            //// Creates a new RectangleContour using the given values.
+            //RectangleContour vaRect = new RectangleContour(720, 96, 1792, 1240);
+
+            RectangleContour vaRect = new RectangleContour(templateConfig.Rectangle.Left, 
+                templateConfig.Rectangle.Top , templateConfig.Rectangle.Height , templateConfig.Rectangle.Width );
+            roi.Add(vaRect);
+            image.Overlays.Default.AddRoi(roi);
+
+            for (int i=0; i < qRConfigs.Count; i++)
+            {
+                // Read QR Code
+                QRDescriptionOptions vaQROptions = new QRDescriptionOptions();
+                vaQROptions.Dimensions = qRConfigs[i].QRDimension;
+                vaQROptions.MirrorMode = QRMirrorMode.AutoDetect;
+                vaQROptions.ModelType = QRModelType.AutoDetect;
+                vaQROptions.Polarity = qRConfigs[i].Polarity;
+                QRSizeOptions vaQRSizeOptions = new QRSizeOptions(3, 15);
+                QRSearchOptions vaQRSearchOptions = new QRSearchOptions();
+                vaQRSearchOptions.CellFilterMode = QRCellFilterMode.AutoDetect;
+                vaQRSearchOptions.CellSampleSize = qRConfigs[i].CellSize;
+                vaQRSearchOptions.DemodulationMode = QRDemodulationMode.AutoDetect;
+                vaQRSearchOptions.EdgeThreshold = 30;
+                vaQRSearchOptions.RotationMode = QRRotationMode.Unlimited;
+                vaQRSearchOptions.SkewDegreesAllowed = 10;
+                vaQRSearchOptions.SkipLocation = false;
+                vaQRCode = Algorithms.ReadQRCode(image, roi, vaQROptions, vaQRSizeOptions, vaQRSearchOptions);
+                if (vaQRCode.Found)
+                {
+                    image.Overlays.Default.AddPolygon(new PolygonContour(vaQRCode.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
+                }
+                System.Text.ASCIIEncoding vaASCIIEncoding = new System.Text.ASCIIEncoding();
+                vaQRCodeData = vaASCIIEncoding.GetString(vaQRCode.GetData());
+
+                qRInfo +=string .Format ("{0}|", vaQRCodeData);
+
+                roi.Dispose();
+            }
+            if (!string.IsNullOrEmpty(qRInfo))
+            {
+                qRInfo = qRInfo.Substring(0, qRInfo.Length - 1);
+            }
+            // Dispose the IVA_Data structure.
+            ivaData.Dispose();
+
+            // Return the palette type of the final image.
+            return qRInfo;
+
+        }
+
         #endregion
 
 
         #region  Process QR Coordinate
-        public static PaletteType ProcessQRCoordinate(VisionImage image)
+        /// <summary>
+        /// author by kiven
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="userProgram"></param>
+        /// <returns>split with '|'</returns>
+        public static string  ProcessQRCoordinate(VisionImage image,UserProgram userProgram)
         {
+            string qRInfo = string.Empty;
+            TemplateConfig templateConfig = userProgram.TemplateConfig;
+            List<QRConfig> qRConfigs = userProgram.QRConfigs;
             // Initialize the IVA_Data structure to pass results and coordinate systems.
             IVA_Data ivaData = new IVA_Data(3, 1);
 
             // Creates a new, empty region of interest.
-            Roi roi = new Roi();
+            Roi roiFullRange = new Roi();
             // Creates a new RotatedRectangleContour using the given values.
             PointContour vaCenter = new PointContour(1405.5, 954);
             RotatedRectangleContour vaRotatedRect = new RotatedRectangleContour(vaCenter, 1661, 1184, 0);
-            roi.Add(vaRotatedRect);
+            RectangleContour rectangle = new RectangleContour(templateConfig.Rectangle.Left, templateConfig.Rectangle.Top,
+                templateConfig.Rectangle.Width, templateConfig.Rectangle.Height);
+            roiFullRange.Add(rectangle);
             // MatchPattern Grayscale
-            string vaTemplateFile = "C:\\Users\\Misadmin\\Desktop\\picture\\11.png";
+            string vaTemplateFile = templateConfig.TemplatePath;
             MatchMode vaMode = MatchMode.RotationInvariant;
             bool vaSubpixelVal = false;
             int[] minAngleVals = { -20, 0 };
@@ -739,8 +825,16 @@ namespace LabelingVisualIdentification
             double vaMinMatchScore = 800;
             double vaOffsetX = 0;
             double vaOffsetY = 0;
-            pmResults = IVA_MatchPattern(image, ivaData, vaTemplateFile, vaMode, vaSubpixelVal, minAngleVals, maxAngleVals, vaNumMatchesRequested, vaMinMatchScore, roi, vaOffsetX, vaOffsetY, 0);
-            roi.Dispose();
+            pmResults = IVA_MatchPattern(image, ivaData, vaTemplateFile, vaMode, vaSubpixelVal, minAngleVals, maxAngleVals, vaNumMatchesRequested, vaMinMatchScore, roiFullRange, vaOffsetX, vaOffsetY, 0);
+            if (pmResults.Count < 1)
+            {
+                return string.Empty;
+            }
+            foreach (PatternMatch match in pmResults)
+            {
+                image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
+            }
+            roiFullRange.Dispose();
 
             // Set Coordinate System
             int vaCoordSystemIndex = 0;
@@ -748,54 +842,60 @@ namespace LabelingVisualIdentification
             int resultIndexOrigin = 1;
             int stepIndexAngle = 0;
             int resultIndexAngle = 3;
-            double refSysOriginX = 1330;
-            double refSysOriginY = 769;
+            double refSysOriginX = templateConfig .Position .X ;
+            double refSysOriginY = templateConfig .Position .Y ;
             double refSysAngle = 0;
             AxisOrientation refSysAxisOrientation = AxisOrientation.Direct;
             int vaCoordSystemType = 3;
             IVA_CoordSys(vaCoordSystemIndex, stepIndexOrigin, resultIndexOrigin, stepIndexAngle, resultIndexAngle, refSysOriginX, refSysOriginY, refSysAngle, refSysAxisOrientation, vaCoordSystemType, ivaData);
 
-            // Creates a new, empty region of interest.
-            Roi roi2 = new Roi();
-            // Creates a new RectangleContour using the given values.
-            RectangleContour vaRect = new RectangleContour(1564, 604, 328, 308);
-            roi2.Add(vaRect);
-            // Reposition the region of interest based on the coordinate system.
-            int coordSystemIndex = 0;
-            Algorithms.TransformRoi(roi2, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
-            // Read QR Code
-            QRDescriptionOptions vaQROptions = new QRDescriptionOptions();
-            vaQROptions.Dimensions = QRDimension.Size25x25;
-            vaQROptions.MirrorMode = QRMirrorMode.AutoDetect;
-            vaQROptions.ModelType = QRModelType.AutoDetect;
-            vaQROptions.Polarity = QRPolarity.BlackOnWhite;
-            QRSizeOptions vaQRSizeOptions = new QRSizeOptions(3, 15);
-            QRSearchOptions vaQRSearchOptions = new QRSearchOptions();
-            vaQRSearchOptions.CellFilterMode = QRCellFilterMode.AutoDetect;
-            vaQRSearchOptions.CellSampleSize = QRCellSampleSize.Size3x3;
-            vaQRSearchOptions.DemodulationMode = QRDemodulationMode.AutoDetect;
-            vaQRSearchOptions.EdgeThreshold = 30;
-            vaQRSearchOptions.RotationMode = QRRotationMode.Unlimited;
-            vaQRSearchOptions.SkewDegreesAllowed = 5;
-            vaQRSearchOptions.SkipLocation = false;
-            vaQRCode = Algorithms.ReadQRCode(image, roi2, vaQROptions, vaQRSizeOptions, vaQRSearchOptions);
-
-            if (vaQRCode.Found)
+            for (int i = 0; i < qRConfigs.Count; i++)
             {
-                Common.qrFound = true;
-                image.Overlays.Default.AddPolygon(new PolygonContour(vaQRCode.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
+                // Creates a new, empty region of interest.
+                Roi roi = new Roi();
+                // Creates a new RectangleContour using the given values.
+                RectangleContour vaRect = new RectangleContour(qRConfigs[i].Rectangle.Left,
+                    qRConfigs[i].Rectangle.Top, qRConfigs[i].Rectangle.Width, qRConfigs[i].Rectangle.Height);
+                roi.Add(vaRect);
+                // Reposition the region of interest based on the coordinate system.
+                int coordSystemIndex = 0;
+                Algorithms.TransformRoi(roi, new CoordinateTransform(ivaData.baseCoordinateSystems[coordSystemIndex], ivaData.MeasurementSystems[coordSystemIndex]));
+                // Read QR Code
+                QRDescriptionOptions vaQROptions = new QRDescriptionOptions();
+                vaQROptions.Dimensions = qRConfigs[i].QRDimension;
+                vaQROptions.MirrorMode = QRMirrorMode.AutoDetect;
+                vaQROptions.ModelType = QRModelType.AutoDetect;
+                vaQROptions.Polarity = qRConfigs[i].Polarity;
+                QRSizeOptions vaQRSizeOptions = new QRSizeOptions(3, 15);
+                QRSearchOptions vaQRSearchOptions = new QRSearchOptions();
+                vaQRSearchOptions.CellFilterMode = QRCellFilterMode.AutoDetect;
+                vaQRSearchOptions.CellSampleSize = qRConfigs[i].CellSize;
+                vaQRSearchOptions.DemodulationMode = QRDemodulationMode.AutoDetect;
+                vaQRSearchOptions.EdgeThreshold = 30;
+                vaQRSearchOptions.RotationMode = QRRotationMode.Unlimited;
+                vaQRSearchOptions.SkewDegreesAllowed = 5;
+                vaQRSearchOptions.SkipLocation = false;
+                vaQRCode = Algorithms.ReadQRCode(image, roi, vaQROptions, vaQRSizeOptions, vaQRSearchOptions);
+
+                if (vaQRCode.Found)
+                {
+                    image.Overlays.Default.AddPolygon(new PolygonContour(vaQRCode.Corners), Rgb32Value.RedColor, DrawingMode.DrawValue);
+                }
+
+                System.Text.ASCIIEncoding vaASCIIEncoding = new System.Text.ASCIIEncoding();
+                vaQRCodeData = vaASCIIEncoding.GetString(vaQRCode.GetData());
+                qRInfo += string.Format("{0}|",vaQRCodeData );
+                roi.Dispose();
             }
-
-            System.Text.ASCIIEncoding vaASCIIEncoding = new System.Text.ASCIIEncoding();
-            vaQRCodeData = vaASCIIEncoding.GetString(vaQRCode.GetData());
-
-            roi2.Dispose();
-
+            if (!string .IsNullOrEmpty (qRInfo ))
+            {
+                qRInfo = qRInfo.Substring(0, qRInfo.Length - 1);
+            }
             // Dispose the IVA_Data structure.
             ivaData.Dispose();
 
             // Return the palette type of the final image.
-            return PaletteType.Gray;
+            return qRInfo;
 
         }
         #endregion

@@ -254,7 +254,7 @@
             // 
             this.txbBarcode.Location = new System.Drawing.Point(10, 510);
             this.txbBarcode.Name = "txbBarcode";
-            this.txbBarcode.Size = new System.Drawing.Size(562, 22);
+            this.txbBarcode.Size = new System.Drawing.Size(562, 21);
             this.txbBarcode.TabIndex = 29;
             // 
             // label10
@@ -262,7 +262,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(641, 157);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(88, 12);
+            this.label10.Size = new System.Drawing.Size(95, 12);
             this.label10.TabIndex = 28;
             this.label10.Text = "BarcodeNumber :";
             // 
@@ -366,7 +366,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(641, 196);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(78, 12);
+            this.label8.Size = new System.Drawing.Size(89, 12);
             this.label8.TabIndex = 18;
             this.label8.Text = "BarcodeTypes :";
             // 
@@ -482,7 +482,7 @@
             // 
             this.tbxDatamatrix.Location = new System.Drawing.Point(10, 520);
             this.tbxDatamatrix.Name = "tbxDatamatrix";
-            this.tbxDatamatrix.Size = new System.Drawing.Size(562, 22);
+            this.tbxDatamatrix.Size = new System.Drawing.Size(562, 21);
             this.tbxDatamatrix.TabIndex = 40;
             // 
             // btnLoadImage3
@@ -569,7 +569,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(651, 223);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(89, 12);
+            this.label12.Size = new System.Drawing.Size(113, 12);
             this.label12.TabIndex = 30;
             this.label12.Text = "Cell Sample Size :";
             // 
@@ -578,7 +578,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(647, 187);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(47, 12);
+            this.label11.Size = new System.Drawing.Size(65, 12);
             this.label11.TabIndex = 30;
             this.label11.Text = "Polarity :";
             // 
@@ -587,7 +587,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(647, 152);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(64, 12);
+            this.label9.Size = new System.Drawing.Size(83, 12);
             this.label9.TabIndex = 30;
             this.label9.Text = "Matrix Size :";
             // 
@@ -730,7 +730,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(644, 269);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(89, 12);
+            this.label13.Size = new System.Drawing.Size(113, 12);
             this.label13.TabIndex = 47;
             this.label13.Text = "Cell Sample Size :";
             // 
@@ -739,7 +739,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(650, 228);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(47, 12);
+            this.label14.Size = new System.Drawing.Size(65, 12);
             this.label14.TabIndex = 48;
             this.label14.Text = "Polarity :";
             // 
@@ -748,9 +748,9 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(650, 189);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(64, 12);
+            this.label15.Size = new System.Drawing.Size(89, 12);
             this.label15.TabIndex = 49;
-            this.label15.Text = "Matrix Size :";
+            this.label15.Text = "QRDimensions :";
             // 
             // cbxQRCell
             // 
@@ -818,7 +818,7 @@
             // 
             this.tbxQR.Location = new System.Drawing.Point(10, 520);
             this.tbxQR.Name = "tbxQR";
-            this.tbxQR.Size = new System.Drawing.Size(562, 22);
+            this.tbxQR.Size = new System.Drawing.Size(562, 21);
             this.tbxQR.TabIndex = 41;
             // 
             // btnClear5

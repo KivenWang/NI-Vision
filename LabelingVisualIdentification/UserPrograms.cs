@@ -8,10 +8,20 @@ using NationalInstruments.Vision.Analysis;
 namespace LabelingVisualIdentification
 {
     [XmlRoot("UserProgramConfig")]
-    public class UserPrograms
+    public class UserProgramConfig
     {
         [XmlArray("UserPrograms"), XmlArrayItem("UserProgram", typeof(UserProgram))]
         public List<UserProgram> UserProgram { get; set; }
+
+        public void Save()
+        {
+            object obj=new object ();
+            lock (obj)
+            {
+                string defaultFilename =string .Format (@"{0}UserPrograms.xml", AppDomain.CurrentDomain.BaseDirectory);
+                ObjectXmlSerializer<UserProgramConfig>.Save(this, defaultFilename);
+            }
+        }
     }
 
     public class UserProgram
@@ -107,8 +117,8 @@ namespace LabelingVisualIdentification
         [XmlAttribute("Index")]
         public int Index { get; set; }
 
-        [XmlElementAttribute("QRSize")]
-        public string QRSize { get; set; }
+        [XmlElementAttribute("QRDimension")]
+        public QRDimension QRDimension { get; set; }
 
         [XmlElementAttribute("Polarity")]
         public QRPolarity Polarity { get; set; }

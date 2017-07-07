@@ -33,13 +33,13 @@
       </DataMatrixConfigs>
       <QRConfigs>
         <QRConfig Name="QRConfig0" Index="0">
-          <QRSize>25X25</QRSize>
+          <QRDimension>Size25x25</QRDimension>
           <Polarity>AutoDetect</Polarity>
           <CellSize>Size3x3</CellSize>
           <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>
         </QRConfig>
         <QRConfig Name="QRConfig1" Index="2">
-          <QRSize>25X25</QRSize>
+          <QRDimension>Size25x25</QRDimension>
           <Polarity>AutoDetect</Polarity>
           <CellSize>Size3x3</CellSize>
           <Rectangle Left="0" Top="0" Width="10" Height="10"></Rectangle>

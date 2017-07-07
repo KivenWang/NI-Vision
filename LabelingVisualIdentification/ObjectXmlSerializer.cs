@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 using log4net;
 
 namespace LabelingVisualIdentification
-{
+{    
     public enum SerializedFormat
     {
         /// <summary>
@@ -84,7 +84,7 @@ namespace LabelingVisualIdentification
     public static class ObjectXmlSerializer<T> where T : class // Specify that T must be a class.
     {
         #region Load methods
-
+        
         /// <summary>
         /// Loads an object from an XML file in Document format.
         /// </summary>
