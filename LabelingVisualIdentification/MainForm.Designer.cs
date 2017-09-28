@@ -1,6 +1,6 @@
 ﻿namespace LabelingVisualIdentification
 {
-    partial class Main
+    partial class MainForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.imageViewer1 = new NationalInstruments.Vision.WindowsForms.ImageViewer();
             this.imageViewer2 = new NationalInstruments.Vision.WindowsForms.ImageViewer();
             this.btnProgramming = new System.Windows.Forms.Button();

@@ -39,3 +39,15 @@ H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\L
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.csproj.GenerateResource.Cache
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.exe
 H:\GitHubCode\Vision\NIVision\Ni-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.pdb
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\LabelingVisualIdentification.exe.config
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.exe
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.pdb
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\LabelingVisualIdentification.exe
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\LabelingVisualIdentification.pdb
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\System.Configuration.dll
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.csprojResolveAssemblyReference.cache
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.Properties.Resources.resources
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.csproj.GenerateResource.Cache
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.MainForm.resources
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.ProgrammingForm.resources
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\ConfigManager\UserPrograms.xml

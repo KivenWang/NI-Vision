@@ -1,7 +1,0 @@
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\obj\Debug\Test.Form1.resources
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\obj\Debug\Test.Properties.Resources.resources
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\obj\Debug\Test.csproj.GenerateResource.Cache
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\bin\Debug\Test.exe
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\bin\Debug\Test.pdb
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\obj\Debug\Test.exe
-H:\GitHubCode\Vision\NIVision\Ni-Vision\Test\obj\Debug\Test.pdb
