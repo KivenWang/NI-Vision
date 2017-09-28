@@ -93,7 +93,7 @@
     <Compile Include="ConfigManager\ConfigManager.cs" />
     <Compile Include="NiVision\Camera.cs" />
     <Compile Include="Utilities\ObjectXmlSerializer.cs" />
-    <Compile Include="NiVision\PictureProcessing.cs" />
+    <Compile Include="NiVision\ProcessPicture.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

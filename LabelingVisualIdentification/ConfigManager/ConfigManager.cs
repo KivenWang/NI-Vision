@@ -14,7 +14,7 @@ namespace LabelingVisualIdentification
             {
                 if (_userPrograms == null)
                 {
-                    string configPath = string.Format(@"{0}UserPrograms.xml", AppDomain.CurrentDomain.BaseDirectory);
+                    string configPath = string.Format(@"{0}ConfigManager\UserPrograms.xml", AppDomain.CurrentDomain.BaseDirectory);
                     _userPrograms = ObjectXmlSerializer<UserProgramConfig>.Load(configPath);
                 }
 

@@ -51,3 +51,9 @@ E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualI
 E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.MainForm.resources
 E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.ProgrammingForm.resources
 E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\ConfigManager\UserPrograms.xml
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Common.dll
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.Common.dll
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.dll
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Common.xml
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.xml
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.Common.xml

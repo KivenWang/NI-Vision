@@ -17,6 +17,7 @@ namespace LabelingVisualIdentification
 {
     public partial class ProgrammingForm : Form
     {
+        private ProcessPicture processPicture = new ProcessPicture();
         private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         private UserProgram userProgram = new UserProgram();
         //private TemplateConfig templateConfig = new TemplateConfig();
@@ -35,7 +36,7 @@ namespace LabelingVisualIdentification
         private ProgrammingForm()
         {
             InitializeComponent();
-            camera = Camera.GetInstance(config .AppSettings .Settings ["CameraName"].Value ); 
+            camera = Camera.GetInstance(config.AppSettings.Settings["CameraName"].Value);
         }
 
 
@@ -55,7 +56,7 @@ namespace LabelingVisualIdentification
         {
             try
             {
-                camera.Snap(imageViewer1.Image);
+                //camera.Snap(imageViewer1.Image);
 
             }
             catch (Exception ex)
@@ -130,7 +131,7 @@ namespace LabelingVisualIdentification
 
                 Collection<PatternMatch> matches = Algorithms.MatchPattern(imageViewer1.Image, imageViewer2.Image, options, imageViewer1.Roi);
                 RectangleContour rectROI1 = (RectangleContour)imageViewer1.Roi.GetContour(0).Shape;
-                userProgram .TemplateConfig .Rectangle .Left  = rectROI1.Left;
+                userProgram.TemplateConfig.Rectangle.Left = rectROI1.Left;
                 userProgram.TemplateConfig.Rectangle.Top = rectROI1.Top;
                 userProgram.TemplateConfig.Rectangle.Width = rectROI1.Width;
                 userProgram.TemplateConfig.Rectangle.Height = rectROI1.Height;
@@ -144,12 +145,12 @@ namespace LabelingVisualIdentification
                 foreach (PatternMatch match in matches)
                 {
                     imageViewer1.Image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
-                    userProgram .TemplateConfig .Position .X  = match.Position.X;
+                    userProgram.TemplateConfig.Position.X = match.Position.X;
                     userProgram.TemplateConfig.Position.Y = match.Position.Y;
                     position.X = match.Position.X;
                     position.Y = match.Position.Y;
                 }
-                userProgram .TemplateConfig .Rectangle = rectangle;
+                userProgram.TemplateConfig.Rectangle = rectangle;
                 userProgram.TemplateConfig.Position = position;
             }
             catch (Exception ex)
@@ -180,7 +181,7 @@ namespace LabelingVisualIdentification
             {
                 try
                 {
-                    userProgram.TemplateConfig .TemplatePath  = System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
+                    userProgram.TemplateConfig.TemplatePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
                     int barcodeNum = imageViewer1.Roi.Count;
                     for (int i = 0; i < barcodeNum; i++)
                     {
@@ -196,12 +197,12 @@ namespace LabelingVisualIdentification
                         {
                             barcodeConfig.Type = BarcodeTypes.Code39;
                         }
-                        barcodeConfig .Index =i ;
-                        barcodeConfig .Name =string .Format ("{0}{1}",barcodeConfig .Type .ToString (),i);
+                        barcodeConfig.Index = i;
+                        barcodeConfig.Name = string.Format("{0}{1}", barcodeConfig.Type.ToString(), i);
                         userProgram.BarcodeConfigs.Add(barcodeConfig);
                     }
                     userProgram.TemplateConfig.TemplatePath = string.Format(@"{0}Programming\template\{1}.png", AppDomain.CurrentDomain.BaseDirectory, txbProgramName.Text);
-                    txbBarcode.Text = PictureProcessing.Process1DBarcode(imageViewer1.Image, userProgram.TemplateConfig ,userProgram .BarcodeConfigs );
+                    txbBarcode.Text = processPicture.Process1DBarcode(imageViewer1.Image, userProgram.TemplateConfig, userProgram.BarcodeConfigs);
 
                 }
                 catch (Exception ex)
@@ -219,7 +220,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxBarcodeTypes.Text == "Code128")
             {
-                for (int i=0;i <userProgram .BarcodeConfigs .Count ;i++)
+                for (int i = 0; i < userProgram.BarcodeConfigs.Count; i++)
                 {
                     userProgram.BarcodeConfigs[i].Type = BarcodeTypes.Code128;
                 }
@@ -241,99 +242,20 @@ namespace LabelingVisualIdentification
 
         private void btnTab2Next_Click(object sender, EventArgs e)
         {
-            string bar1Write = "";
-            string bar2Write = "";
-            string bar3Write = "";
-            string bar4Write = "";
-            string bar5Write = "";
-            string bar6Write = "";
-
             int barcodeNo = Convert.ToInt32(cbxBarcodeNo.Text);
             string[] writeInfo = new string[barcodeNo + 6];
-
-            try
-            {
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 0)
-                //{
-                //    RectangleContour rectROI1 = (RectangleContour)imageViewer1.Roi.GetContour(0).Shape;
-                //    bar1Write = "Barcode1Rectangle:" + rectROI1.Left + "," + rectROI1.Top + "," + rectROI1.Width + "," + rectROI1.Height;
-                //    writeInfo[6] = bar1Write;
-                //}
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 1)
-                //{
-                //    RectangleContour rectROI2 = (RectangleContour)imageViewer1.Roi.GetContour(1).Shape;
-                //    bar2Write = "Barcode2Rectangle:" + rectROI2.Left + "," + rectROI2.Top + "," + rectROI2.Width + "," + rectROI2.Height;
-                //    writeInfo[7] = bar2Write;
-                //}
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 2)
-                //{
-                //    RectangleContour rectROI3 = (RectangleContour)imageViewer1.Roi.GetContour(2).Shape;
-                //    bar3Write = "Barcode3Rectangle:" + rectROI3.Left + "," + rectROI3.Top + "," + rectROI3.Width + "," + rectROI3.Height;
-                //    writeInfo[8] = bar3Write;
-                //}
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 3)
-                //{
-                //    RectangleContour rectROI4 = (RectangleContour)imageViewer1.Roi.GetContour(3).Shape;
-                //    bar4Write = "Barcode4Rectangle:" + rectROI4.Left + "," + rectROI4.Top + "," + rectROI4.Width + "," + rectROI4.Height;
-                //    writeInfo[9] = bar4Write;
-                //}
-
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 4)
-                //{
-                //    RectangleContour rectROI5 = (RectangleContour)imageViewer1.Roi.GetContour(4).Shape;
-                //    bar5Write = "Barcode5Rectangle:" + rectROI5.Left + "," + rectROI5.Top + "," + rectROI5.Width + "," + rectROI5.Height;
-                //    writeInfo[10] = bar5Write;
-                //}
-
-                //if (Convert.ToInt32(cbxBarcodeNo.Text) > 5)
-                //{
-                //    RectangleContour rectROI6 = (RectangleContour)imageViewer1.Roi.GetContour(5).Shape;
-                //    bar6Write = "Barcode6Rectangle:" + rectROI6.Left + "," + rectROI6.Top + "," + rectROI6.Width + "," + rectROI6.Height;
-                //    writeInfo[11] = bar6Write;
-                //}
-
-                //if (txbBarcode.Text != "" & cbxBarcodeNo.Text != "" & cbxFormat.Text != "" & cbxBarcodeTypes.Text != "")
-                //{
-                //    writeInfo[0] = "BarcodeFormat:" + cbxFormat.Text;
-                //    writeInfo[1] = "BarcodeNumber:" + cbxBarcodeNo.Text;
-                //    writeInfo[2] = "TemplatePosition:" + Common.templatePositionX.ToString() + "," + Common.templatePositionY.ToString();
-                //    writeInfo[3] = "BarcodeTypes:" + cbxBarcodeTypes.Text;
-                //    writeInfo[4] = "PatternRectangle:" + Common.patternRectLeft + "," + Common.patternRectTop + "," + Common.patternRectWidth + "," + Common.patternRectHeight;
-                //    writeInfo[5] = "TemplatePath;" + Common.templatePath;
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Please confirm the information is integrated!");
-                //}
-                ////File.WriteAllText(@"C:\Users\plc\Desktop\barcodePrograming\Programming\123", cbxBarcodeNo.Text + "," + bar1Write + "," + bar2Write, Encoding.UTF8);
-
-
-                //File.WriteAllLines(Common.path + "\\Programming\\" + txbProgramName.Text, writeInfo);
-                this.tabControl1.SelectedIndex = 3;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
+            this.tabControl1.SelectedIndex = 3;
         }
 
         private void btnTab2Pre_Click(object sender, EventArgs e)
         {
             this.tabControl1.SelectedIndex = 0;
         }
-
-        private void btnWriteFile_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
         private void btnSnap3_Click(object sender, EventArgs e)
         {
             try
             {
-                camera.Snap(imageViewer3.Image);
+                //camera.Snap(imageViewer3.Image);
 
             }
             catch (Exception ex)
@@ -341,7 +263,6 @@ namespace LabelingVisualIdentification
                 MessageBox.Show(ex.Message);
             }
         }
-
         private void btnLoadImage3_Click(object sender, EventArgs e)
         {
             ImagePreviewFileDialog imageDialog = new ImagePreviewFileDialog();
@@ -353,7 +274,6 @@ namespace LabelingVisualIdentification
                 imageViewer3.Image.ReadFile(imageDialog.FileName);
             }
         }
-
         private void btnExtract3_Click(object sender, EventArgs e)
         {
             try
@@ -373,9 +293,7 @@ namespace LabelingVisualIdentification
         {
             try
             {
-
                 imageViewer3.Image.Overlays.Default.Clear();
-
                 MatchPatternOptions options = new MatchPatternOptions(MatchMode.RotationInvariant, 1);
 
                 options.MinimumMatchScore = 800;
@@ -393,7 +311,7 @@ namespace LabelingVisualIdentification
                 foreach (PatternMatch match in matches)
                 {
                     imageViewer3.Image.Overlays.Default.AddPolygon(new PolygonContour(match.Corners), Rgb32Value.RedColor);
-                    userProgram .TemplateConfig .Position .X  = match.Position.X;
+                    userProgram.TemplateConfig.Position.X = match.Position.X;
                     userProgram.TemplateConfig.Position.Y = match.Position.Y;
                 }
             }
@@ -407,7 +325,7 @@ namespace LabelingVisualIdentification
         {
             try
             {
-                string writePath = System .AppDomain .CurrentDomain .BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
+                string writePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
                 imageViewer4.Image.WriteVisionFile(writePath);
                 MessageBox.Show("Template pattern has been saved successful!");
             }
@@ -425,14 +343,13 @@ namespace LabelingVisualIdentification
                 {
                     userProgram.TemplateConfig.TemplatePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
                     RectangleContour rectROI1 = (RectangleContour)imageViewer3.Roi.GetContour(0).Shape;
-                    userProgram .DataMatrixConfigs [0].Rectangle .Left  = rectROI1.Left;
+                    userProgram.DataMatrixConfigs[0].Rectangle.Left = rectROI1.Left;
                     userProgram.DataMatrixConfigs[0].Rectangle.Top = rectROI1.Top;
                     userProgram.DataMatrixConfigs[0].Rectangle.Width = rectROI1.Width;
                     userProgram.DataMatrixConfigs[0].Rectangle.Height = rectROI1.Height;
 
-
-                    tbxDatamatrix.Text =PictureProcessing.ProcessDatamatrix(imageViewer3.Image,userProgram .TemplateConfig ,userProgram .DataMatrixConfigs );
-                    if (string .IsNullOrEmpty ( tbxDatamatrix.Text))
+                    tbxDatamatrix.Text = processPicture.ProcessDatamatrix(imageViewer3.Image, userProgram.TemplateConfig, userProgram.DataMatrixConfigs);
+                    if (string.IsNullOrEmpty(tbxDatamatrix.Text))
                     {
                         MessageBox.Show("There is no Datamatrix in the image!");
                     }
@@ -441,7 +358,6 @@ namespace LabelingVisualIdentification
                 {
                     MessageBox.Show(ex.Message);
                 }
-
             }
             else
             {
@@ -469,24 +385,14 @@ namespace LabelingVisualIdentification
             {
                 if (cbxMatrixSize.Text != "" & cbxCellSample.Text != "" & cbxPolarity.Text != "")
                 {
-                //    writeInfo[0] = "BarcodeFormat:" + cbxFormat.Text;
-                //    writeInfo[1] = "TemplatePosition:" + Common.templatePositionX.ToString() + "," + Common.templatePositionY.ToString();
-
-                //    writeInfo[2] = "PatternRectangle:" + Common.patternRectLeft + "," + Common.patternRectTop + "," + Common.patternRectWidth + "," + Common.patternRectHeight;
-
-                //    writeInfo[3] = "DatamatrixRectangle:" + Common.dmRectLeft + "," + Common.dmRectTop + "," + Common.dmRectWidth + "," + Common.dmRectHeight;
-
-                //    writeInfo[4] = "DatamatrixMatrixSize:" + Common.matrixSize;
-                //    writeInfo[5] = "DatamatrixPolarity:" + Common.polarity;
-                //    writeInfo[6] = "DatamatrixCellSampleSize:" + Common.cellSampleSize;
-                //    writeInfo[7] = "TemplatePath;" + userProgram.TemplateConfig.TemplatePath;
+                    
                 }
                 else
                 {
                     MessageBox.Show("Please confirm the information is integrated!");
                 }
                 //File.WriteAllText(@"C:\Users\plc\Desktop\barcodePrograming\Programming\123", cbxBarcodeNo.Text + "," + bar1Write + "," + bar2Write, Encoding.UTF8);
-                
+
                 File.WriteAllLines(System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\" + txbProgramName.Text, writeInfo);
                 this.tabControl1.SelectedIndex = 3;
             }
@@ -500,7 +406,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxMatrixSize.Text == "Auto-detect")
             {
-                userProgram .DataMatrixConfigs [0].MatrixSize  = "0";
+                userProgram.DataMatrixConfigs[0].MatrixSize = "0";
             }
             else if (cbxMatrixSize.Text == "23*23")
             {
@@ -524,7 +430,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxPolarity.Text == "Auto-detect")
             {
-                userProgram .DataMatrixConfigs [0].Polarity  = DataMatrixPolarity.AutoDetect;
+                userProgram.DataMatrixConfigs[0].Polarity = DataMatrixPolarity.AutoDetect;
             }
             else if (cbxPolarity.Text == "Black on White")
             {
@@ -540,7 +446,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxCellSample.Text == "Auto-detect")
             {
-                userProgram.DataMatrixConfigs[0].CellSize  = DataMatrixCellSampleSize.AutoDetect;
+                userProgram.DataMatrixConfigs[0].CellSize = DataMatrixCellSampleSize.AutoDetect;
             }
             else if (cbxCellSample.Text == "3*3")
             {
@@ -553,7 +459,7 @@ namespace LabelingVisualIdentification
         {
             try
             {
-                camera.Snap(imageViewer5.Image);
+                //camera.Snap(imageViewer5.Image);
 
             }
             catch (Exception ex)
@@ -578,7 +484,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxQRSize.Text == "Auto-detect")
             {
-                userProgram .QRConfigs [0].QRDimension  = QRDimension.AutoDetect;
+                userProgram.QRConfigs[0].QRDimension = QRDimension.AutoDetect;
             }
             else if (cbxQRSize.Text == "11*11")
             {
@@ -614,7 +520,7 @@ namespace LabelingVisualIdentification
         {
             if (cbxCellSample.Text == "Auto-detect")
             {
-                userProgram.QRConfigs [0].CellSize  = QRCellSampleSize.AutoDetect;
+                userProgram.QRConfigs[0].CellSize = QRCellSampleSize.AutoDetect;
             }
             else if (cbxCellSample.Text == "3*3")
             {
@@ -630,8 +536,8 @@ namespace LabelingVisualIdentification
                 try
                 {
                     RectangleContour rectROI1 = (RectangleContour)imageViewer5.Roi.GetContour(0).Shape;
-                    userProgram .QRConfigs [0].Rectangle .Left  = rectROI1.Left;
-                    userProgram .QRConfigs [0].Rectangle .Top  = rectROI1.Top;
+                    userProgram.QRConfigs[0].Rectangle.Left = rectROI1.Left;
+                    userProgram.QRConfigs[0].Rectangle.Top = rectROI1.Top;
                     userProgram.QRConfigs[0].Rectangle.Width = rectROI1.Width;
                     userProgram.QRConfigs[0].Rectangle.Height = rectROI1.Height;
                     qRConfig.Rectangle.Left = rectROI1.Left;
@@ -640,10 +546,10 @@ namespace LabelingVisualIdentification
                     qRConfig.Rectangle.Height = rectROI1.Height;
                     qRConfig.Index = 0;
                     qRConfig.Name = string.Format("QRConfig0");
-                                        
-                        qRConfig.QRDimension = QRDimension.AutoDetect;
-                    
-                     if (cbxQRSize.Text == "11*11")
+
+                    qRConfig.QRDimension = QRDimension.AutoDetect;
+
+                    if (cbxQRSize.Text == "11*11")
                     {
                         qRConfig.QRDimension = QRDimension.Size11x11;
                     }
@@ -655,34 +561,34 @@ namespace LabelingVisualIdentification
                     {
                         qRConfig.QRDimension = QRDimension.Size25x25;
                     }
-                    
-                     qRConfig.Polarity  = QRPolarity.AutoDetect;
-                     
-                      if (cbxQRPolarity.Text == "Black on White")
-                     {
-                         qRConfig.Polarity = QRPolarity.BlackOnWhite;
-                     }
-                     else if (cbxQRPolarity.Text == "White on Black")
-                     {
-                         qRConfig.Polarity = QRPolarity.WhiteOnBlack;
-                     }
-                    
-                      qRConfig.CellSize = QRCellSampleSize.AutoDetect;
-                       if (cbxCellSample.Text == "3*3")
-                      {
-                          qRConfig.CellSize = QRCellSampleSize.Size3x3;
-                      }
-                       userProgram.QRConfigs.Add(qRConfig );
 
-                       tbxQR.Text = PictureProcessing.ProcessQR(imageViewer5.Image, userProgram.QRConfigs );
+                    qRConfig.Polarity = QRPolarity.AutoDetect;
 
-                    
+                    if (cbxQRPolarity.Text == "Black on White")
+                    {
+                        qRConfig.Polarity = QRPolarity.BlackOnWhite;
+                    }
+                    else if (cbxQRPolarity.Text == "White on Black")
+                    {
+                        qRConfig.Polarity = QRPolarity.WhiteOnBlack;
+                    }
+
+                    qRConfig.CellSize = QRCellSampleSize.AutoDetect;
+                    if (cbxCellSample.Text == "3*3")
+                    {
+                        qRConfig.CellSize = QRCellSampleSize.Size3x3;
+                    }
+                    userProgram.QRConfigs.Add(qRConfig);
+
+                    tbxQR.Text = processPicture.ProcessQR(imageViewer5.Image, userProgram.QRConfigs);
+
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message + "Please select a ROI which contains the QR code! ");
                 }
-                
+
             }
             else
             {
@@ -704,13 +610,7 @@ namespace LabelingVisualIdentification
         {
             try
             {
-                //string[] writeInfos = new string[4];
-                //writeInfos[0] = "QRRectangle:" + Common.QRRectLeft + "," + Common.QRRectTop + "," + Common.QRRectWidth + "," + Common.QRRectHeight;
-                //writeInfos[1] = "QRMatrixSize:" + Common.QRDimensions;
-                //writeInfos[2] = "QRPolarity:" + Common.QRpolaritys;
-                //writeInfos[3] = "QRCellSampleSize:" + Common.QRCellSampleSizes;
-                //File.AppendAllLines(Common.path + "\\Programming\\" + txbProgramName.Text, writeInfos, Encoding.UTF8);
-                ConfigManager.UserPrograms.UserProgram.Add(userProgram );
+                ConfigManager.UserPrograms.UserProgram.Add(userProgram);
                 ConfigManager.UserPrograms.Save();
             }
             catch (Exception ex)
@@ -725,9 +625,7 @@ namespace LabelingVisualIdentification
 
         private void Programming_FormClosed(object sender, FormClosedEventArgs e)
         {
-
             frmProgramming = null;
-
         }
 
         private void btnPre4_Click(object sender, EventArgs e)

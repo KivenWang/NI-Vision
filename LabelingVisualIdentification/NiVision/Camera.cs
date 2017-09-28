@@ -6,10 +6,10 @@ using NationalInstruments.Vision.Acquisition.Imaqdx;
 
 namespace LabelingVisualIdentification
 {
-    public class Camera:ImaqdxSession
+    public class Camera//:ImaqdxSession ; 继承ImaqdxSession,没有安装相机驱动,故临时注释
     {
         private Camera(string cameraName)
-            : base(cameraName)
+            //: base(cameraName)
         {
         }
         private static Camera camera = null;

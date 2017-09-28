@@ -22,6 +22,7 @@ namespace LabelingVisualIdentification
 
     public partial class MainForm : Form
     {
+        private ProcessPicture processPicture = new ProcessPicture();
         private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         private Camera camera;
         private List<UserProgram> userProgram = ConfigManager.UserPrograms.UserProgram;
@@ -96,7 +97,6 @@ namespace LabelingVisualIdentification
 
         private void btnProgramming_Click(object sender, EventArgs e)
         {
-
             ProgrammingForm fr = ProgrammingForm.GetInstance();
             fr.Show();
             fr.Activate();
@@ -198,7 +198,7 @@ namespace LabelingVisualIdentification
                     try
                     {
 
-                        camera.Snap(imageViewer1.Image);
+                        //camera.Snap(imageViewer1.Image);
                     }
                     catch (Exception ex)
                     {
@@ -261,7 +261,7 @@ namespace LabelingVisualIdentification
                 {
                     try
                     {
-                        camera.Snap(imageViewer2.Image);
+                        //camera.Snap(imageViewer2.Image);
                     }
                     catch (Exception ex)
                     {
@@ -408,12 +408,12 @@ namespace LabelingVisualIdentification
                     lblResult1.Text = "FAIL";
                     if (currentProgram .BarcodeConfigs.Count >0)
                     {
-                        txtAnalysis1=PictureProcessing.Process1DBarcode(imageViewer1.Image,
+                        txtAnalysis1 = processPicture.Process1DBarcode(imageViewer1.Image,
                             currentProgram .TemplateConfig ,currentProgram .BarcodeConfigs );
                     }
                     if (currentProgram .DataMatrixConfigs .Count >0)
                     {
-                        txtAnalysis1=PictureProcessing.ProcessDatamatrix(imageViewer1.Image, currentProgram.TemplateConfig,
+                        txtAnalysis1 = processPicture.ProcessDatamatrix(imageViewer1.Image, currentProgram.TemplateConfig,
                             currentProgram .DataMatrixConfigs );
                     }
                     txtSend.Text = string.Format("{0}:{1}", DateTime.Now.ToString(), txtAnalysis1);
@@ -423,13 +423,12 @@ namespace LabelingVisualIdentification
                         lblResult1.Text = "PASS";
                     }
                 }
-
                 if (i == 2)
                 {
                     //读取状态label
                     lblResult2.BackColor = Color.Red;
                     lblResult2.Text = "FAIL";
-                    txtAnalysis2=PictureProcessing.ProcessQR(imageViewer2.Image, currentProgram.QRConfigs);
+                    txtAnalysis2 = processPicture.ProcessQR(imageViewer2.Image, currentProgram.QRConfigs);
                     txtCompare.Text = string.Format("{0}:{1}",DateTime .Now .ToString (),txtAnalysis2 );
                     if (txtAnalysis2 != "")
                     {
@@ -590,10 +589,8 @@ namespace LabelingVisualIdentification
         private void timer()
         {
             timerPLC.Elapsed += new System.Timers.ElapsedEventHandler(timerTh_Tick);
-
         }
 
-        int ijk = 0;
         /// <summary>
         /// TimerTh_Tick   PLC query and write
         /// </summary>
@@ -601,7 +598,6 @@ namespace LabelingVisualIdentification
         /// <param name="e"></param>
         private void timerTh_Tick(object sender, System.Timers.ElapsedEventArgs e)
         {
-
             try
             {
                 PlcWrite(queryPLC);
@@ -676,9 +672,7 @@ namespace LabelingVisualIdentification
                 string strHex = String.Format("{0:X2}", cNum);
 
                 strTemp += strHex;
-
             }
-
             txtInformation.AppendText(DateTime.Now.ToString() + ": Response of PLC: " + strTemp + "\r\n");
             if (run)
             {
@@ -691,7 +685,7 @@ namespace LabelingVisualIdentification
                             try
                             {
                                 txtInformation.AppendText(DateTime.Now.ToString() + " Path: " + currentProgram.TemplateConfig.TemplatePath + "\r\n");
-                                camera.Snap(imageViewer1.Image);
+                                //camera.Snap(imageViewer1.Image);
                                 Analysis(1);
                             }
                             catch (Exception ex)
@@ -700,8 +694,6 @@ namespace LabelingVisualIdentification
                                 MessageBox.Show(ex.Message + "---Snap1 errorF!");
                                 txtInformation.AppendText(DateTime.Now.ToString() + ":snap1 error in automatic process!\r\n");
                             }
-
-
                             if (txtAnalysis1 == "")
                             {
                                 timerPLC.Enabled = false;
@@ -721,7 +713,7 @@ namespace LabelingVisualIdentification
                         {
                             try
                             {
-                                camera.Snap(imageViewer2.Image);
+                                //camera.Snap(imageViewer2.Image);
                                 Analysis(2);
                             }
                             catch (Exception ex)
@@ -759,7 +751,6 @@ namespace LabelingVisualIdentification
             }
 
         }
-
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("确定要退出吗？", "确定Yes 取消No", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.No)
