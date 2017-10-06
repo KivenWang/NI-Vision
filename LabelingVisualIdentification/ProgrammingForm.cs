@@ -12,10 +12,13 @@ using NationalInstruments.Vision.Acquisition.Imaqdx;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Configuration;
+using DevComponents.DotNetBar.Controls;
+using DevComponents.DotNetBar;
+using DevComponents.DotNetBar.Rendering;
 
 namespace LabelingVisualIdentification
 {
-    public partial class ProgrammingForm : Form
+    public partial class ProgrammingForm : DevComponents.DotNetBar.OfficeForm
     {
         private ProcessPicture processPicture = new ProcessPicture();
         private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -129,7 +132,8 @@ namespace LabelingVisualIdentification
                 options.MinimumContrast = 0;
                 options.SubpixelAccuracy = false;
 
-                Collection<PatternMatch> matches = Algorithms.MatchPattern(imageViewer1.Image, imageViewer2.Image, options, imageViewer1.Roi);
+                Collection<PatternMatch> matches = Algorithms.MatchPattern(
+                    imageViewer1.Image, imageViewer2.Image, options, imageViewer1.Roi);
                 RectangleContour rectROI1 = (RectangleContour)imageViewer1.Roi.GetContour(0).Shape;
                 userProgram.TemplateConfig.Rectangle.Left = rectROI1.Left;
                 userProgram.TemplateConfig.Rectangle.Top = rectROI1.Top;
@@ -164,14 +168,15 @@ namespace LabelingVisualIdentification
         {
             try
             {
-                string writePath = string.Format(@"{0}Programming\template\{1}.png", AppDomain.CurrentDomain.BaseDirectory, txbProgramName.Text);
+                string writePath = string.Format(@"{0}Programming\template\{1}.png", 
+                    AppDomain.CurrentDomain.BaseDirectory, txbProgramName.Text);
 
                 imageViewer2.Image.WriteVisionFile(writePath);
                 MessageBox.Show("Template pattern has been saved successful!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message); 
             }
         }
 
@@ -181,7 +186,8 @@ namespace LabelingVisualIdentification
             {
                 try
                 {
-                    userProgram.TemplateConfig.TemplatePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\template\\" + txbProgramName.Text + ".png";
+                    userProgram.TemplateConfig.TemplatePath = string.Format(@"{0}\Programming\template\{1}.png",
+                        System .AppDomain .CurrentDomain .BaseDirectory ,txbProgramName .Text );
                     int barcodeNum = imageViewer1.Roi.Count;
                     for (int i = 0; i < barcodeNum; i++)
                     {
@@ -391,7 +397,6 @@ namespace LabelingVisualIdentification
                 {
                     MessageBox.Show("Please confirm the information is integrated!");
                 }
-                //File.WriteAllText(@"C:\Users\plc\Desktop\barcodePrograming\Programming\123", cbxBarcodeNo.Text + "," + bar1Write + "," + bar2Write, Encoding.UTF8);
 
                 File.WriteAllLines(System.AppDomain.CurrentDomain.BaseDirectory + "\\Programming\\" + txbProgramName.Text, writeInfo);
                 this.tabControl1.SelectedIndex = 3;

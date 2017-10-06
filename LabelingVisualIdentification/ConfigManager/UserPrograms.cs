@@ -18,8 +18,8 @@ namespace LabelingVisualIdentification
             object obj=new object ();
             lock (obj)
             {
-                string defaultFilename =string .Format (@"{0}UserPrograms.xml", AppDomain.CurrentDomain.BaseDirectory);
-                ObjectXmlSerializer<UserProgramConfig>.Save(this, defaultFilename);
+                string configPath = string.Format(@"{0}ConfigManager\UserPrograms.xml", AppDomain.CurrentDomain.BaseDirectory);
+                ObjectXmlSerializer<UserProgramConfig>.Save(this, configPath);
             }
         }
     }

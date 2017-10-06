@@ -57,3 +57,6 @@ E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstrum
 E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Common.xml
 E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.xml
 E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\NationalInstruments.Vision.Common.xml
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\DevComponents.DotNetBar2.dll
+E:\githubVision\NI-Vision\LabelingVisualIdentification\bin\Debug\DevComponents.DotNetBar2.xml
+E:\githubVision\NI-Vision\LabelingVisualIdentification\obj\Debug\LabelingVisualIdentification.ProgramForm.resources

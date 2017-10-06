@@ -97,9 +97,11 @@ namespace LabelingVisualIdentification
 
         private void btnProgramming_Click(object sender, EventArgs e)
         {
-            ProgrammingForm fr = ProgrammingForm.GetInstance();
-            fr.Show();
-            fr.Activate();
+            //ProgrammingForm fr = ProgrammingForm.GetInstance();
+            //fr.Show();
+            //fr.Activate();
+            ProgramForm fr2 = new ProgramForm();
+            fr2.ShowDialog();
         }
 
 
